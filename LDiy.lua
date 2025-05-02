@@ -24,7 +24,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.6'
+currentVersion = '1.7'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -4598,7 +4598,7 @@ CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 'Kills Roblox process (or go back to ma
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'antivoid / voidbooster / voidboost', DESC = 'Launches you up when You\'re close to the Void'}
 CMDs[#CMDs + 1] = {NAME = 'unantivoid / unvoidbooster / unvoidboost', DESC = 'Disables antivoid'}
-CMDs[#CMDs + 1] = {NAME = 'DisableCustomAnticheat', DESC = 'Disable the game\'s anticheat.'}
+CMDs[#CMDs + 1] = {NAME = 'DisableCustomAnticheat [game]', DESC = 'Disable the game\'s anticheat.'}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
 CMDs[#CMDs + 1] = {NAME = 'tweenfly / tfly / twfly [speed]', DESC = 'Makes you fly using tween'}
@@ -11260,7 +11260,18 @@ addcmd('copyposition',{'copypos'},function(args, speaker)
 end)
 
 addcmd('DisableCustomAnticheat',{},function(args, speaker)
-    notify("Missing exploit", "There is no anticheat disabling exploit available for this game. If you have one contact the developer.")
+    if args[1]:lower() == 'insoni' then
+		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
+		local ac;
+		for _, obj in loc do
+			obj.Name:find("2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "0")
+			ac = obj
+		end
+		task.wait()
+		if ac then ac:Destroy(); notify("InSOnI anticheat disabler", "Successfully deleted anticheat script.") else notify("InSOnI anticheat disabler", "Something went wrong while trying to find anticheat script, please notify developer.") end
+	else
+		notify("Missing Exploit", "There is no available exploit for "..args[1]..", if you have one you can contact the developer.")
+	end
 end)
 
 addcmd('walktopos',{'walktoposition'},function(args, speaker)
@@ -15085,16 +15096,6 @@ task.spawn(function()
         notify("4nn1's Place", "Game Detected! Some commands were added/changed/removed")
 	end
 	if PlaceId == 357766274 then
-		notify("InSOnI v3", "Game Detected! Added 'DisableCustomAnticheat' command with InSOnI game configuration.")
-		addcmd('DisableCustomAnticheat',{},function(args, speaker)
-    		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
-			local ac;
-			for _, obj in loc do
-				obj.Name:find("2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "0")
-				ac = obj
-			end
-			task.wait()
-			if ac then ac:Destroy(); notify("InSOnI anticheat disabler", "Successfully deleted anticheat script.") else notify("InSOnI anticheat disabler", "Something went wrong while trying to find anticheat script, please notify developer.") end
-		end)
+		notify("InSOnI v3", "Game Detected! Run \";DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
 	end
 end)
