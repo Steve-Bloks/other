@@ -10420,7 +10420,7 @@ addcmd('sillyanims',{},function(args, speaker)
 	notify('Loading LuaDev\'s silly animations...', "Hold on a sec...")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/sillyanims.lua"))()
 	task.wait(3)
-	notify('LuaDev\'s silly animations', "Rejoin")
+	notify('LuaDev\'s silly animations', "Rejoin to disable.")
 end)
 
 
