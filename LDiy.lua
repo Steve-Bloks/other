@@ -11484,7 +11484,7 @@ end)
 
 addcmd('explorer', {'dex'}, function(args, speaker)
     notify('Loading', 'Hold on a sec')
-    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/dex.lua"))
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/dex.lua"))()
 end)
 
 addcmd('olddex', {'odex'}, function(args, speaker)
