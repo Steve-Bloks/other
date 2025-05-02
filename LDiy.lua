@@ -4544,7 +4544,6 @@ CMDs[#CMDs + 1] = {NAME = 'unc / unctest / unccheckevn', DESC = 'Tests all UNC E
 CMDs[#CMDs + 1] = {NAME = 'sunc / sunctest / sunccheckevn', DESC = 'Tests all UNC Environment strictly, credits will be printed'}
 CMDs[#CMDs + 1] = {NAME = 'luarmor / luarmortest / luarmorcheck', DESC = "Tests the executor's luarmor compatibility, by Luarmor themselves"}
 CMDs[#CMDs + 1] = {NAME = 'identitytest / testidentity / validateidentity', DESC = 'Tests the executors identity if its faked or not, by Cherry [InfernusScripts]'}
-CMDs[#CMDs + 1] = {NAME = 'addunc / addmoreunc / adduncevn [version]', DESC = 'Adds some UNC Environment(s) from version 1 - 3, by vxsty'}
 CMDs[#CMDs + 1] = {NAME = 'execute / run / code', DESC = 'Execute a LuaU code.'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'betterexplorer / betterdex', DESC = 'Opens BetterDEX by REDz'}
@@ -4559,7 +4558,6 @@ CMDs[#CMDs + 1] = {NAME = 'notifyjobid', DESC = 'Notifies you the games JobId'}
 CMDs[#CMDs + 1] = {NAME = 'rejoin / rj', DESC = 'Makes you rejoin the game'}
 CMDs[#CMDs + 1] = {NAME = 'autorejoin / autorj', DESC = 'Automatically rejoins the server if you get kicked/disconnected'}
 CMDs[#CMDs + 1] = {NAME = 'serverhop / shop', DESC = 'Teleports you to a different server'}
-CMDs[#CMDs + 1] = {NAME = 'serverlist / slist', DESC = 'Lists you servers for you to join'}
 CMDs[#CMDs + 1] = {NAME = 'gameteleport / gametp [place ID]', DESC = 'Joins a game by ID'}
 CMDs[#CMDs + 1] = {NAME = 'antiidle / antiafk', DESC = 'Prevents the game from kicking you for being idle/afk'}
 CMDs[#CMDs + 1] = {NAME = 'datalimit [num]', DESC = 'Set outgoing KBPS limit'}
@@ -5007,7 +5005,7 @@ CMDs[#CMDs + 1] = {NAME = 'unhidechar [player]', DESC = 'Stops hiding the charac
 CMDs[#CMDs + 1] = {NAME = 'unhideallchars', DESC = 'Unhides all the characters.'}
 CMDs[#CMDs + 1] = {NAME = 'printglobals / printg / getglobals / getg', DESC = 'Prints out every global variables'}
 CMDs[#CMDs + 1] = {NAME = 'setglobal / setg [Global Name] [true/false]', DESC = 'Set a global variable to certain value.'}
-CMDs[#CMDs + 1] = {NAME = 'feflip', DESC = 'Loads up fe backflip by Zeezy'}
+CMDs[#CMDs + 1] = {NAME = 'sillyanims', DESC = 'Loads silly animations by LuaDev'}
 task.wait()
 
 for i = 1, #CMDs do
@@ -10426,9 +10424,11 @@ addcmd('unfreezeanims',{},function(args, speaker)
     end
 end)
 
-addcmd('feflip',{},function(args, speaker)
-    loadstring(game:HttpGet("https://pastebin.com/raw/xi23b40Y"))()
-    notify('Credits to Zeezy\nKeybinds: Z (FrontFlip) X (BackFlip) C (AirJump)')
+addcmd('sillyanims',{},function(args, speaker)
+	notify('Loading LuaDev\'s silly animations...', "Hold on a sec...")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/sillyanims.lua"))()
+	task.wait(5)
+	notify('LuaDev\'s silly animations', "Reset character to disable.")
 end)
 
 
