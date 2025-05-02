@@ -4542,13 +4542,9 @@ CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox console'}
 CMDs[#CMDs + 1] = {NAME = 'killroblox', DESC = 'Kills Roblox process'}
 CMDs[#CMDs + 1] = {NAME = 'unc / unctest / unccheckevn', DESC = 'Tests all UNC Environment, by vxsty'}
 CMDs[#CMDs + 1] = {NAME = 'sunc / sunctest / sunccheckevn', DESC = 'Tests all UNC Environment strictly, credits will be printed'}
-CMDs[#CMDs + 1] = {NAME = 'luarmor / luarmortest / luarmorcheck', DESC = "Tests the executor's luarmor compatibility, by Luarmor themselves"}
 CMDs[#CMDs + 1] = {NAME = 'identitytest / testidentity / validateidentity', DESC = 'Tests the executors identity if its faked or not, by Cherry [InfernusScripts]'}
 CMDs[#CMDs + 1] = {NAME = 'execute / run / code', DESC = 'Execute a LuaU code.'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
-CMDs[#CMDs + 1] = {NAME = 'betterexplorer / betterdex', DESC = 'Opens BetterDEX by REDz'}
-CMDs[#CMDs + 1] = {NAME = 'solaraexplorer / solaradex', DESC = 'Opens SolaraDEX by Iflorisme'}
-CMDs[#CMDs + 1] = {NAME = 'secureexplorer / securedex / bypasseddex', DESC = 'Opens Bypassed DEX by HamstaGang'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'remotespy / rspy', DESC = 'Opens Simple Spy V3'}
 CMDs[#CMDs + 1] = {NAME = 'audiologger / alogger', DESC = 'Opens audio logger'}
@@ -4576,9 +4572,9 @@ CMDs[#CMDs + 1] = {NAME = 'hideguis', DESC = 'Hides any GUIs in PlayerGui'}
 CMDs[#CMDs + 1] = {NAME = 'unhideguis', DESC = 'Undoes hideguis'}
 CMDs[#CMDs + 1] = {NAME = 'guidelete', DESC = 'Enables backspace to delete GUI'}
 CMDs[#CMDs + 1] = {NAME = 'unguidelete / noguidelete', DESC = 'Disables guidelete'}
-CMDs[#CMDs + 1] = {NAME = 'stealgui / stealguis [path] [name]', DESC = "Steals the game's gui, i love you bat/vxsty."}
-CMDs[#CMDs + 1] = {NAME = 'hideiy / hideui', DESC = 'Hides the main UI'}
-CMDs[#CMDs + 1] = {NAME = 'showui / unhideui / showui / unhideui', DESC = 'Shows the UI again'}
+CMDs[#CMDs + 1] = {NAME = 'stealgui / stealguis [path] [name]', DESC = "Steals the game's gui."}
+CMDs[#CMDs + 1] = {NAME = 'hideldiy / hideui', DESC = 'Hides the main UI'}
+CMDs[#CMDs + 1] = {NAME = 'showldiy / unhideldiy / showui / unhideui', DESC = 'Shows the UI again'}
 CMDs[#CMDs + 1] = {NAME = 'keepldiy / keepldiy', DESC = 'Auto execute LuaDev\'s Infinite Yield when you teleport through servers'}
 CMDs[#CMDs + 1] = {NAME = 'unkeepldiy / unkeepldiy', DESC = 'Disable keepldiy'}
 CMDs[#CMDs + 1] = {NAME = 'togglekeepldiy / toggleunkeepldiy', DESC = 'Toggle keepldiy'}
