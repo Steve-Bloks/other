@@ -4598,6 +4598,7 @@ CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 'Kills Roblox process (or go back to ma
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'antivoid / voidbooster / voidboost', DESC = 'Launches you up when You\'re close to the Void'}
 CMDs[#CMDs + 1] = {NAME = 'unantivoid / unvoidbooster / unvoidboost', DESC = 'Disables antivoid'}
+CMDs[#CMDs + 1] = {NAME = 'DisableCustomAnticheat', DESC = 'Disable the game\'s anticheat.'}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
 CMDs[#CMDs + 1] = {NAME = 'tweenfly / tfly / twfly [speed]', DESC = 'Makes you fly using tween'}
@@ -11258,6 +11259,10 @@ addcmd('copyposition',{'copypos'},function(args, speaker)
     end
 end)
 
+addcmd('DisableCustomAnticheat',{},function(args, speaker)
+    notify("Missing exploit", "There is no anticheat disabling exploit available for this game. If you have one contact the developer.")
+end)
+
 addcmd('walktopos',{'walktoposition'},function(args, speaker)
     if speaker.Character:FindFirstChildOfClass('Humanoid') and speaker.Character:FindFirstChildOfClass('Humanoid').SeatPart then
         speaker.Character:FindFirstChildOfClass('Humanoid').Sit = false
@@ -15081,11 +15086,6 @@ task.spawn(function()
 	end
 	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected! Added 'DisableCustomAnticheat' command with InSOnI game configuration.")
-		local v = {NAME = "DisableCustomAnticheat", DESC = "Disable InSOnI\'s anticheat."}
-		cmdMap[v.NAME:lower()] = v
-        for _,alias in pairs(v.ALIAS) do
-            cmdMap[alias:lower()] = v
-        end
 		addcmd('DisableCustomAnticheat',{},function(args, speaker)
     		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
 			local ac;
