@@ -26,6 +26,8 @@ end
 
 currentVersion = '1.0'
 
+local guiScale = 1 -- lazy fix for bug lol
+
 ScaledHolder = Instance.new("Frame")
 Scale = Instance.new("UIScale")
 Holder = Instance.new("Frame")
@@ -14488,7 +14490,6 @@ addcmd("guiscale", {}, function(args, speaker)
     if args[1] and isNumber(args[1]) then
         local scale = tonumber(args[1])
         if scale % 1 == 0 then scale = scale / 100 end
-        -- me when i divide and it explodes
         if scale == 0.01 then scale = 1 end
         if scale == 0.02 then scale = 2 end
 
