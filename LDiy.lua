@@ -4582,7 +4582,7 @@ CMDs[#CMDs + 1] = {NAME = 'hideiy / hideui', DESC = 'Hides the main UI'}
 CMDs[#CMDs + 1] = {NAME = 'showui / unhideui / showui / unhideui', DESC = 'Shows the UI again'}
 CMDs[#CMDs + 1] = {NAME = 'keepldiy / keepldiy', DESC = 'Auto execute LuaDev\'s Infinite Yield when you teleport through servers'}
 CMDs[#CMDs + 1] = {NAME = 'unkeepldiy / unkeepldiy', DESC = 'Disable keepldiy'}
-CMDs[#CMDs + 1] = {NAME = 'togglekeepldiy / togglekeepldiy', DESC = 'Toggle keepldiy'}
+CMDs[#CMDs + 1] = {NAME = 'togglekeepldiy / toggleunkeepldiy', DESC = 'Toggle keepldiy'}
 CMDs[#CMDs + 1] = {NAME = 'killldiy / killldiy', DESC = 'Kills LuaDev\'s Infinite Yield'}
 CMDs[#CMDs + 1] = {NAME = 'savegame / saveplace', DESC = 'Uses saveinstance to save the game'}
 CMDs[#CMDs + 1] = {NAME = 'savelogs', DESC = 'Saves console logs as a file'}
@@ -6462,7 +6462,7 @@ local TeleportCheck = false
 Players.LocalPlayer.OnTeleport:Connect(function(State)
     if KeepInfYield and (not TeleportCheck) and queueteleport then
         TeleportCheck = true
-        queueteleport("loadstring(game:HttpGet(('')))()")
+        queueteleport("loadstring(game:HttpGet(('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/LDiy.lua')))()")
     end
 end)
 
@@ -6507,7 +6507,7 @@ addcmd('clraliases',{},function(args, speaker)
     refreshaliases()
 end)
 
-addcmd('keepiy', {"keepiyr"}, function(args, speaker)
+addcmd('keepldiy', {"keepldiy"}, function(args, speaker)
     if queueteleport then
         KeepInfYield = true
         updatesaves()
@@ -6516,7 +6516,7 @@ addcmd('keepiy', {"keepiyr"}, function(args, speaker)
     end
 end)
 
-addcmd('unkeepiy', {"unkeepiyr"}, function(args, speaker)
+addcmd('unkeepldiy', {"unkeepldiy"}, function(args, speaker)
     if queueteleport then
         KeepInfYield = false
         updatesaves()
@@ -6525,7 +6525,7 @@ addcmd('unkeepiy', {"unkeepiyr"}, function(args, speaker)
     end
 end)
 
-addcmd('toggleunkeepiy', {"toggleunkeepiyr"}, function(args, speaker)
+addcmd('togglekeepldiy', {"toggleunkeepldiy"}, function(args, speaker)
     if queueteleport then
         KeepInfYield = not KeepInfYield
         updatesaves()
@@ -6534,7 +6534,7 @@ addcmd('toggleunkeepiy', {"toggleunkeepiyr"}, function(args, speaker)
     end
 end)
 
-addcmd('killiy', {"killiyr"}, function(args, speaker)
+addcmd('killldiy', {"killldiy"}, function(args, speaker)
     getgenv().LDIY_LOADED = false
     PARENT:Destroy()
     
@@ -8495,8 +8495,9 @@ end)
 
 addcmd("savegame", {"saveplace"}, function(args, speaker)
     if saveinstance then
+	local save = loadstring(game:HttpGet("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/saveinstanceexploit.lua"))()
         notify("Loading", "Downloading game. This will take a while")
-        saveinstance()
+	save()
         notify("Game Saved", "Saved place to the workspace folder within your exploit folder.")
     else
         notify("Incompatible Exploit", "Your exploit does not support this command (missing saveinstance)")
@@ -8544,7 +8545,6 @@ addcmd('clearerror',{'clearerrors'},function(args, speaker)
     GuiService:ClearError()
 end)
 
--- REMINDER: Replace this with konstant --Ry: bish where can i find konstant?!
 addcmd("decompile", {"decompiler"}, function(args, speaker)
     local option = tonumber(args[1]) or 1
     local Decompile = nil
