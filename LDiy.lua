@@ -15078,7 +15078,8 @@ task.spawn(function()
     end
     if PlaceId == 574746640 then
         notify("4nn1's Place", "Game Detected! Some commands were added/changed/removed")
-	elseif PlaceId == 357766274 then
+	end
+	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected! Added 'DisableCustomAnticheat' command with InSOnI game configuration.")
 		addcmd('DisableCustomAnticheat',{},function(args, speaker)
     		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
