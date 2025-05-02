@@ -24,7 +24,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7'
+currentVersion = '1.6.1'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -15096,6 +15096,6 @@ task.spawn(function()
         notify("4nn1's Place", "Game Detected! Some commands were added/changed/removed")
 	end
 	if PlaceId == 357766274 then
-		notify("InSOnI v3", "Game Detected! Run \";DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
+		notify("InSOnI v3", "Game Detected!\nRun \";DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
 	end
 end)
