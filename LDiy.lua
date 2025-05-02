@@ -8671,7 +8671,7 @@ addcmd('disableadonis', {'deleteanticheat', 'disableanticheat'}, function(args, 
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/adonis/refs/heads/main/adonisdisabler.lua"))()
         notify('Adonis Disabler', 'Disabled Adonis anti-cheat.')
     else
-        notify('Adonis Disabler', 'Unable to disable Adonis anti-cheat: Incompatible exploit (missing getgc or rawget or hookfunction or setthreadidentity or getrenv or executor level < 8 ['..getthreadidentity()..'])'
+        notify('Adonis Disabler', 'Unable to disable Adonis anti-cheat: Incompatible exploit (missing getgc or rawget or hookfunction or setthreadidentity or getrenv or executor level < 8 ['..getthreadidentity()..'])')
     end
 end)
 
