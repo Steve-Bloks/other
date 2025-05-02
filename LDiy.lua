@@ -24,7 +24,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.3'
+currentVersion = '1.5'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -15078,5 +15078,17 @@ task.spawn(function()
     end
     if PlaceId == 574746640 then
         notify("4nn1's Place", "Game Detected! Some commands were added/changed/removed")
-    end
+	elseif PlaceId == 357766274 then
+		notify("InSOnI v3", "Game Detected! Added 'DisableCustomAnticheat' command with InSOnI game configuration.")
+		addcmd('DisableCustomAnticheat',{},function(args, speaker)
+    		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
+			local ac;
+			for _, obj in loc do
+				obj.Name:find("2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "0")
+				ac = obj
+			end
+			task.wait()
+			if ac then ac:Destroy() else notify("InSOnI anticheat disabler", "Something went wrong while trying to find anticheat script, please notify developer.") end
+		end)
+	end
 end)
