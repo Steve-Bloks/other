@@ -4542,7 +4542,6 @@ CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox console'}
 CMDs[#CMDs + 1] = {NAME = 'killroblox', DESC = 'Kills Roblox process'}
 CMDs[#CMDs + 1] = {NAME = 'unc / unctest / unccheckevn', DESC = 'Tests all UNC Environment, by vxsty'}
 CMDs[#CMDs + 1] = {NAME = 'sunc / sunctest / sunccheckevn', DESC = 'Tests all UNC Environment strictly, credits will be printed'}
-CMDs[#CMDs + 1] = {NAME = 'cunc / cunctest / cunccheckevn', DESC = 'Another variant of the SUNC Test, by Cherry [InfernusScripts]'}
 CMDs[#CMDs + 1] = {NAME = 'luarmor / luarmortest / luarmorcheck', DESC = "Tests the executor's luarmor compatibility, by Luarmor themselves"}
 CMDs[#CMDs + 1] = {NAME = 'identitytest / testidentity / validateidentity', DESC = 'Tests the executors identity if its faked or not, by Cherry [InfernusScripts]'}
 CMDs[#CMDs + 1] = {NAME = 'addunc / addmoreunc / adduncevn [version]', DESC = 'Adds some UNC Environment(s) from version 1 - 3, by vxsty'}
@@ -4611,6 +4610,7 @@ CMDs[#CMDs + 1] = {NAME = 'tweenfly / tfly / twfly [speed]', DESC = 'Makes you f
 CMDs[#CMDs + 1] = {NAME = 'untweenfly / untfly / untwfly', DESC = 'Disables tweenfly'}
 CMDs[#CMDs + 1] = {NAME = 'fly [speed]', DESC = 'Makes you fly'}
 CMDs[#CMDs + 1] = {NAME = 'unfly', DESC = 'Disables fly'}
+CMDs[#CMDs + 1] = {NAME = 'aimbot', DESC = 'Loads LuaDev\'s Light-Weight aimbot.'}
 CMDs[#CMDs + 1] = {NAME = 'flyspeed [num]', DESC = 'Set fly speed (default is 20)'}
 CMDs[#CMDs + 1] = {NAME = 'vehiclefly / vfly [speed]', DESC = 'Makes you fly in a vehicle'}
 CMDs[#CMDs + 1] = {NAME = 'unvehiclefly / unvfly', DESC = 'Disables vehicle fly'}
@@ -6516,6 +6516,11 @@ addcmd('keepldiy', {"keepldiy"}, function(args, speaker)
     else
         notify('Incompatible Exploit','Your exploit does not support this command (missing queue_on_teleport)')
     end
+end)
+
+addcmd('aimbot', {}, function(args, speaker)
+	notify("Loading...", "Hold on a sec")
+	loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/Future-Hub/refs/heads/main/light-weight%20aimbot.lua"))()
 end)
 
 addcmd('unkeepldiy', {"unkeepldiy"}, function(args, speaker)
