@@ -24,7 +24,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.5'
+currentVersion = '1.6'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -15081,7 +15081,7 @@ task.spawn(function()
 	end
 	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected! Added 'DisableCustomAnticheat' command with InSOnI game configuration.")
-		CMDs[#CMDs + 1] = {NAME = 'DisableCustomAnticheat', DESC = 'Disable InSOnI\'s anticheat'}
+		cmdMap["disablecustomanticheat"] = v
 		addcmd('DisableCustomAnticheat',{},function(args, speaker)
     		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
 			local ac;
