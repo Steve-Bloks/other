@@ -15081,6 +15081,7 @@ task.spawn(function()
 	end
 	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected! Added 'DisableCustomAnticheat' command with InSOnI game configuration.")
+		CMDs[#CMDs + 1] = {NAME = "DisableCustomAnticheat", DESC = "Disable InSOnI's anticheat"}
 		addcmd('DisableCustomAnticheat',{},function(args, speaker)
     		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
 			local ac;
@@ -15089,7 +15090,7 @@ task.spawn(function()
 				ac = obj
 			end
 			task.wait()
-			if ac then ac:Destroy() else notify("InSOnI anticheat disabler", "Something went wrong while trying to find anticheat script, please notify developer.") end
+			if ac then ac:Destroy(); notify("InSOnI anticheat disabler", "Successfully deleted anticheat script.") else notify("InSOnI anticheat disabler", "Something went wrong while trying to find anticheat script, please notify developer.") end
 		end)
 	end
 end)
