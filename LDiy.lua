@@ -15081,7 +15081,11 @@ task.spawn(function()
 	end
 	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected! Added 'DisableCustomAnticheat' command with InSOnI game configuration.")
-		cmdMap["disablecustomanticheat"] = v
+		local v = {NAME = "DisableCustomAnticheat", DESC = "Disable InSOnI\'s anticheat."}
+		cmdMap[v.NAME:lower()] = v
+        for _,alias in pairs(v.ALIAS) do
+            cmdMap[alias:lower()] = v
+        end
 		addcmd('DisableCustomAnticheat',{},function(args, speaker)
     		local loc = game.Players.LocalPlayer.PlayerGui.PlayerUi:GetChildren()
 			local ac;
