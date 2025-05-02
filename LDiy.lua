@@ -4958,13 +4958,9 @@ CMDs[#CMDs + 1] = {NAME = 'norender', DESC = 'Disable 3d Rendering to decrease t
 CMDs[#CMDs + 1] = {NAME = 'render', DESC = 'Enable 3d Rendering'}
 CMDs[#CMDs + 1] = {NAME = 'use2022materials / 2022materials', DESC = 'Enables 2022 material textures'}
 CMDs[#CMDs + 1] = {NAME = 'unuse2022materials / un2022materials', DESC = 'Disables 2022 material textures'}
-CMDs[#CMDs + 1] = {NAME = 'r6 / faker6 / r31 / r6anim / r6reanim', DESC = 'Changes your R15 animations to R6'}
-CMDs[#CMDs + 1] = {NAME = 'promptr6', DESC = 'Prompts the game to switch your rig type to R6'}
-CMDs[#CMDs + 1] = {NAME = 'promptr15', DESC = 'Prompts the game to switch your rig type to R15'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'antifling', DESC = 'Prevents you from flinging'}
 CMDs[#CMDs + 1] = {NAME = 'unantifling', DESC = 'Turns off antifling'}
-CMDs[#CMDs + 1] = {NAME = 'vulnscheck / vulns / vuln', DESC = 'Checks if your executor has vulns'}
 CMDs[#CMDs + 1] = {NAME = 'antibang / antirape', DESC = 'Prevents you from getting banged'}
 CMDs[#CMDs + 1] = {NAME = 'unantibang / unantirape', DESC = 'Turns off anti bang'}
 CMDs[#CMDs + 1] = {NAME = 'toggleantibang / toggleantirape', DESC = 'Toggles anti bang'}
@@ -11469,10 +11465,10 @@ addcmd("vulnspatch",{'vpatcher','vulnspatcher'},function(args, speaker)
     notify("Patching vulns (Thanks to v3rm community)")
 end)
 
-addcmd("vulnscheck",{"vulns","vuln"},function()
+--[[addcmd("vulnscheck",{"vulns","vuln"},function()
     loadstring(game:HttpGet("https://github.com/FurryBoyYT/moreunc/raw/main/vulntestsource"))()
     notify("Check console", "Press F9 or type /console in chat to see results")
-end)
+end)]]
 
 addcmd("execute", {"run", "code"}, function(args, speaker)
     local code = table.concat(args, " ")
