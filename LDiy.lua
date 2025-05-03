@@ -4671,7 +4671,7 @@ CMDs[#CMDs + 1] = {NAME = 'chatlogs / clogs', DESC = 'Log what people say or whi
 CMDs[#CMDs + 1] = {NAME = 'joinlogs / jlogs', DESC = 'Log when people join'}
 CMDs[#CMDs + 1] = {NAME = 'chatlogswebhook / logswebhook [url]', DESC = 'Set a discord webhook for chatlogs to go to (provide no url to disable this)'}
 CMDs[#CMDs + 1] = {NAME = 'chat / say [text]', DESC = 'Makes you chat a string (possible mute bypass)'}
-CMDs[#CMDs + 1] = {NAME = 'clearchat', DESC = 'Clears the chat serversidely (ONLY WORKS WITH NEW TEXTCHAT)'}
+CMDs[#CMDs + 1] = {NAME = 'clearchat [reason (optional)]', DESC = 'Clears the chat server-side (ONLY WORKS WITH NEW TEXTCHAT)'}
 CMDs[#CMDs + 1] = {NAME = 'spam [text]', DESC = 'Makes you spam the chat'}
 CMDs[#CMDs + 1] = {NAME = 'unspam', DESC = 'Turns off spam'}
 CMDs[#CMDs + 1] = {NAME = 'whisper / pm [player] [text]', DESC = 'Makes you whisper a string to someone (possible mute bypass)'}
@@ -11820,9 +11820,15 @@ addcmd('chat',{'say'},function(args, speaker)
 end)
 
 addcmd("clearchat", {'cc', 'chatclear','chatc'}, function(args, LocalPlayer)
-    local blob = "\u{000D}" 
-    local message = "".. blob:rep(100)
-    chatsend(message .. '[Chat Cleared by LuaDev\'s IY]')
+	if args[1] and args[1] ~= nil and args[1] ~= "" and args[1] ~= " " then
+	    local blob = "\u{000D}" 
+    	local message = "".. blob:rep(100)
+    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]\n[Message: '..args[1]..']')
+	else
+		local blob = "\u{000D}" 
+    	local message = "".. blob:rep(100)
+    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]')
+	end
 end)
 
 addcmd('whisper',{'pm'},function(args, speaker)
