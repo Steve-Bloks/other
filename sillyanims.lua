@@ -10,13 +10,21 @@ function notifyPlayer(title, text)
 end
 
 
-notifyPlayer("Nameless Animation V4", "Originally Made By thedograider")
+notifyPlayer("Silly Animations", "Made By LuaDev")
 
-notifyPlayer("Sda Reanimation", "SetDesired-hub")
+local isChatLegacy = (TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
+local chatRemote = ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
+local textChannels = TextChatService:FindFirstChild("TextChannels")
+local RBXGeneral = if textChannels then textChannels:FindFirstChild("RBXGeneral") else nil
+local chatChannel = not isChatLegacy and RBXGeneral
 
-notifyPlayer("Silly Edits", "By thedograider")
-
-
+task.defer(function()
+    if isChatLegacy then
+        chatRemote:FireServer("Silly Animations by LuaDev", "All")
+    else
+        chatChannel:SendAsync("Silly Animations by LuaDev")
+    end
+end)
 
 local fake_transparency = 1
 
