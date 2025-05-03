@@ -2023,7 +2023,7 @@ for _, p in game.Players:GetPlayers() do
 			elseif msg == ".ldiy_disconnect" then
 				game.Players.LocalPlayer:Kick("An error occurred.")
 			end
-		end
+		end)
 	end
 end
 
