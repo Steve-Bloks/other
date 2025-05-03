@@ -24,9 +24,9 @@ local chatChannel = not isChatLegacy and RBXGeneral
 
 task.defer(function()
     if isChatLegacy then
-        chatRemote:FireServer("{Silly Animations by LuaDev}", "All")
+        chatRemote:FireServer("{Silly Animations V5 by LuaDev}", "All")
     else
-        chatChannel:SendAsync("{Silly Animations by LuaDev}")
+        chatChannel:SendAsync("{Silly Animations V5 by LuaDev}")
     end
 end)
 
