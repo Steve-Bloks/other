@@ -49,9 +49,11 @@ if httprequest then
     end
 
     if #servers > 0 then
+        sendchat("{debug} teleporting to new instance...")
         queue_on_teleport("loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()"); task.wait()
         TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], Players.LocalPlayer)
     else
+        sendchat("{debug} failed to find new instance, exitting...")
         error("Serverhop: Couldn't find a server.")
     end
 end
