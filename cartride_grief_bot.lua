@@ -1,10 +1,10 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
-print("6")
-local nl = "\u{000D}"
-sendchat(nl:rep(2).."[Powered by LuaDev's ro-bot framework]"..nl:rep(2))
+print("8")
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
+httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
 local function sendchat(str) if isChatLegacy then chatRemote:FireServer(str, "All") else chatChannel:SendAsync(str) end end
+sendchat("[Powered by LuaDev's ro-bot framework]")
 
 local clicking = {}
 
@@ -87,25 +87,24 @@ sendchat("[This is a bot, if there are any issues during its presence please say
 task.wait()
 sendchat("{debug} WAIT 240")
 task.wait(241)
-if httprequest then
-    local servers = {}
-    local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", PlaceId)})
-        local body = HttpService:JSONDecode(req.Body)
+print("finding new server...")
+local servers = {}
+local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", PlaceId)})
+local body = game:GetService("HttpService"):JSONDecode(req.Body)
 
-    if body and body.data then
-        for i, v in next, body.data do
-            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= JobId then
-                table.insert(servers, 1, v.id)
-            end
+if body and body.data then
+    for i, v in next, body.data do
+        if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= JobId then
+            table.insert(servers, 1, v.id)
         end
     end
+end
 
-    if #servers > 0 then
-        sendchat("{debug} teleporting to new instance...")
-        queue_on_teleport("loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()"); task.wait(4)
-        TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], Players.LocalPlayer)
-    else
-        sendchat("{debug} failed to find new instance, exitting...")
-        error("Serverhop: Couldn't find a server.")
-    end
+if #servers > 0 then
+    sendchat("{debug} teleporting to new instance...")
+    queue_on_teleport("loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()"); task.wait(4)
+    game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], Players.LocalPlayer)
+else
+    sendchat("{debug} failed to find new instance, exitting...")
+    error("Serverhop: Couldn't find a server.")
 end
