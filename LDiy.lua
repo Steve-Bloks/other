@@ -9666,7 +9666,7 @@ end)
 
 addcmd('thirdp',{'thirdperson'},function(args, speaker)
     speaker.CameraMode = "Classic"
-	if speaker.CameraMaxZoomDistance <= 0 then speaker.CameraMaxZoomDistance = 9999 end
+	speaker.CameraMaxZoomDistance = 9999
 end)
 
 addcmd('noclipcam', {'nccam'}, function(args, speaker)
