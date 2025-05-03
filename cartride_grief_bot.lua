@@ -86,7 +86,7 @@ end)
 task.wait(3)
 sendchat("[This is a bot, if there are any issues during its presence please say '-report <issue>', the developer will review the chat logs after the test]")
 task.wait()
-sendchat("{debug} WAIT 240")
+sendchat("{debug} WAIT 180")
 task.wait(181)
 print("finding new server...")
 local servers = {}
