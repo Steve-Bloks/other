@@ -1,5 +1,5 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
-print("9")
+print("10")
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
@@ -103,7 +103,7 @@ end
 if #servers > 0 then
     sendchat("{debug} teleporting to new instance...")
     queue_on_teleport("loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()"); task.wait(4)
-    game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], Players.LocalPlayer)
+    game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], game.Players.LocalPlayer)
 else
     sendchat("{debug} failed to find new instance, exitting...")
     error("Serverhop: Couldn't find a server.")
