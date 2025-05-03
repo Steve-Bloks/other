@@ -10,11 +10,11 @@ function notifyPlayer(title, text, duration)
 end
 
 if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.RigType ~= Enum.HumanoidRigType.R6 then
-	notifyPlayer("Silly Animations", "Your character has to be R6")
+	notifyPlayer("Silly Animations", "Your character has to be R6", 10)
 	error("Silly Animations: Your character has to be R6",9)
 end
 
-notifyPlayer("Silly Animations", "Made By LuaDev")
+notifyPlayer("Silly Animations", "Made By LuaDev", 8)
 
 local isChatLegacy = (TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 local chatRemote = ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
@@ -24,9 +24,9 @@ local chatChannel = not isChatLegacy and RBXGeneral
 
 task.defer(function()
     if isChatLegacy then
-        chatRemote:FireServer("Silly Animations by LuaDev", "All")
+        chatRemote:FireServer("{Silly Animations by LuaDev}", "All")
     else
-        chatChannel:SendAsync("Silly Animations by LuaDev")
+        chatChannel:SendAsync("{Silly Animations by LuaDev}")
     end
 end)
 
