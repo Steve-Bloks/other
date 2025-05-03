@@ -1,5 +1,7 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
-print("3")
+print("6")
+local nl = "\u{000D}"
+sendchat(nl:rep(2).."[Powered by LuaDev's ro-bot framework]"..nl:rep(2))
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
 local function sendchat(str) if isChatLegacy then chatRemote:FireServer(str, "All") else chatChannel:SendAsync(str) end end
@@ -58,11 +60,13 @@ do
     spin()
 end
 
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(310.417419, 855.799927, 322.503387, 0.999758244, 1.91938729e-10, -0.021988906, -1.56461066e-10, 1, 1.61515468e-09, 0.021988906, -1.61132374e-09, 0.999758244)
-task.wait(1.5)
-game.Players.LocalPlayer.Character.Humanoid.Health = 0
-game.Players.LocalPlayer.CharacterAdded:Wait()
-task.wait(0.2
+do
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(310.417419, 855.799927, 322.503387, 0.999758244, 1.91938729e-10, -0.021988906, -1.56461066e-10, 1, 1.61515468e-09, 0.021988906, -1.61132374e-09, 0.999758244)
+    task.wait(1.5)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(44.64011, 3.09999967, -75.1940765, 1, 1.14074195e-09, -3.96626735e-14, -1.14074195e-09, 1, -3.85503324e-10, 3.96622331e-14, 3.85503324e-10, 1)
+end
+
+task.wait(0.5)
 
 sendchat("Hello people!")
 task.wait(0.5)
