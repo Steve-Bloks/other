@@ -27,7 +27,7 @@ local function setCanCollideOfModelDescendants(model, bval)
     end
 end
 
-for i, v in pairs(Players:GetPlayers()) do
+for i, v in pairs(game.Players:GetPlayers()) do
     if v ~= Players.LocalPlayer then
         RunService.Stepped:Connect(function()
             setCanCollideOfModelDescendants(v.Character, false)
@@ -35,7 +35,7 @@ for i, v in pairs(Players:GetPlayers()) do
     end
 end
 
-Players.PlayerAdded:Connect(function(plr)
+game.Players.PlayerAdded:Connect(function(plr)
     RunService.Stepped:Connect(function()
         setCanCollideOfModelDescendants(plr.Character, false)
     end)
