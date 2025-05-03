@@ -9,7 +9,7 @@ function notifyPlayer(title, text, duration)
     })
 end
 
-if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
+if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.RigType ~= Enum.HumanoidRigType.R6 then
 	notifyPlayer("Silly Animations", "Your character has to be R6")
 	error("Silly Animations: Your character has to be R6",9)
 end
