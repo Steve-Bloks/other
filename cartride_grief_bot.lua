@@ -1,5 +1,5 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
-print("8")
+print("9")
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
@@ -89,7 +89,7 @@ sendchat("{debug} WAIT 240")
 task.wait(241)
 print("finding new server...")
 local servers = {}
-local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", PlaceId)})
+local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
 local body = game:GetService("HttpService"):JSONDecode(req.Body)
 
 if body and body.data then
