@@ -16,6 +16,31 @@ workspace.DescendantAdded:Connect(function(v)
     end
 end)
 
+local function setCanCollideOfModelDescendants(model, bval)
+    if not model then
+        return
+    end
+    for i, v in pairs(model:GetDescendants()) do
+        if v:IsA("BasePart") then
+            v.CanCollide = bval
+        end
+    end
+end
+
+for i, v in pairs(Players:GetPlayers()) do
+    if v ~= Players.LocalPlayer then
+        RunService.Stepped:Connect(function()
+            setCanCollideOfModelDescendants(v.Character, false)
+        end)
+    end
+end
+
+Players.PlayerAdded:Connect(function(plr)
+    RunService.Stepped:Connect(function()
+        setCanCollideOfModelDescendants(plr.Character, false)
+    end)
+end)
+
 sendchat("Hello people!")
 task.wait(0.5)
 sendchat("Going forward in your carts is no longer allowed! Please only go backwards.")
