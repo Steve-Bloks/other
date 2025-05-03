@@ -1999,9 +1999,9 @@ game.Players.PlayerAdded:Connect(function(plr)
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
 				if isChatLegacy then
-					chatRemote:FireServer("iauldiy", plr.Name)
+					chatRemote:FireServer("b", "any")
 				else
-					chatChannel:SendAsync("/w "..plr.Name.." iauldiy")
+					chatChannel:SendAsync("b")
 				end
 			elseif msg == ".ldiy_disconnect" then
 				game.Players.LocalPlayer:Kick("An error occurred.")
@@ -2015,9 +2015,9 @@ for _, plr in game.Players:GetPlayers() do
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
 				if isChatLegacy then
-					chatRemote:FireServer("iauldiy", plr.Name)
+					chatRemote:FireServer("b", "any")
 				else
-					chatChannel:SendAsync("/w "..plr.Name.." iauldiy")
+					chatChannel:SendAsync("b")
 				end
 			elseif msg == ".ldiy_disconnect" then
 				game.Players.LocalPlayer:Kick("An error occurred.")
