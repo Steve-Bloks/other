@@ -9664,6 +9664,10 @@ addcmd('firstp',{},function(args, speaker)
     speaker.CameraMode = "LockFirstPerson"
 end)
 
+addcmd('maxzoom',{},function(args, speaker)
+    speaker.CameraMaxZoomDistance = args[1]
+end)
+
 addcmd('thirdp',{'thirdperson'},function(args, speaker)
     speaker.CameraMode = "Classic"
 	speaker.CameraMaxZoomDistance = 9999
@@ -9687,10 +9691,6 @@ addcmd('noclipcam', {'nccam'}, function(args, speaker)
             end
         end
     end
-end)
-
-addcmd('maxzoom',{},function(args, speaker)
-    speaker.CameraMaxZoomDistance = args[1]
 end)
 
 addcmd('minzoom',{},function(args, speaker)
