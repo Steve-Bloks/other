@@ -11822,7 +11822,7 @@ end)
 addcmd("clearchat", {'cc', 'chatclear','chatc'}, function(args, LocalPlayer)
     local blob = "\u{000D}" 
     local message = "".. blob:rep(100)
-    chatsend(message .. '[Chat Cleared by LDIY]')
+    chatsend(message .. '[Chat Cleared by LuaDev\'s IY]')
 end)
 
 addcmd('whisper',{'pm'},function(args, speaker)
