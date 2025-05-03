@@ -1,5 +1,5 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
-print("1")
+print("2")
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
 local function sendchat(str) if isChatLegacy then chatRemote:FireServer(str, "All") else chatChannel:SendAsync(str) end end
@@ -73,7 +73,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
     end
 end)
 task.wait(3)
-sendchat("[This is a bot, if there are any issues during its presence please say '-report <issue>', the developer will review chat logs after the test]")
+sendchat("[This is a bot, if there are any issues during its presence please say '-report <issue>', the developer will review the chat logs after the test]")
 task.wait()
 sendchat("{debug} WAIT 240")
 task.wait(241)
