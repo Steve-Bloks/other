@@ -240,13 +240,7 @@ FakeCharacter.Parent = workspace
 
 local rig = animationplayer.LoadDummy(FakeCharacter)
 
--- Sigma Sigma Ayo Kita Sigma
--- Bacot Jing
-
--- local track = rig:LoadAnimation("rbxassetid://17603135849")
--- coroutine.wrap(function()
---     track:Play()
--- end)()
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 7
 
 task.spawn(function()
 	for _, LS in ipairs(FakeCharacter:GetChildren()) do
