@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.6.3'
+currentVersion = '1.6.4'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -11413,30 +11413,6 @@ addcmd('unloopjumppower',{'unloopjp','unloopjpower'},function(args, speaker)
             speaker.Character:FindFirstChildOfClass('Humanoid').JumpHeight  = 50
         end
     end
-end)
-
-addcmd('console',{},function(args, speaker)
-    -- Thanks wally!!
-    notify("Loading",'Hold on a sec')
-    local _, str = pcall(function()
-        return game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/console.lua", true)
-    end)
-
-    local s, e = loadstring(str)
-    if typeof(s) ~= "function" then
-        return
-    end
-
-    local success, message = pcall(s)
-    if (not success) then
-        if printconsole then
-            printconsole(message)
-        elseif printoutput then
-            printoutput(message)
-        end
-    end
-    task.wait(1)
-    notify('Console','Press F9 to open the console')
 end)
 
 addcmd("killroblox",{},function(args, speaker)
