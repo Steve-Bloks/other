@@ -1,3 +1,4 @@
+--loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
 local function sendchat(str) if isChatLegacy then chatRemote:FireServer(str, "All") else chatChannel:SendAsync(str) end end
@@ -28,15 +29,15 @@ local function setCanCollideOfModelDescendants(model, bval)
 end
 
 for i, v in pairs(game.Players:GetPlayers()) do
-    if v ~= Players.LocalPlayer then
-        RunService.Stepped:Connect(function()
+    if v ~= game.Players.LocalPlayer then
+        game:GetService("RunService").Stepped:Connect(function()
             setCanCollideOfModelDescendants(v.Character, false)
         end)
     end
 end
 
 game.Players.PlayerAdded:Connect(function(plr)
-    RunService.Stepped:Connect(function()
+    game:GetService("RunService").Stepped:Connect(function()
         setCanCollideOfModelDescendants(plr.Character, false)
     end)
 end)
