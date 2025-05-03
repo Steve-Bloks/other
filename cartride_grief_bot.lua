@@ -73,7 +73,9 @@ task.wait(0.5)
 sendchat("Hello people!")
 task.wait(0.5)
 sendchat("Going forward in your carts is no longer allowed! Please only go backwards.")
-task.wait(8)
+task.wait(1)
+sendchat("[This is a bot, if there are any issues during its presence please say '-report <issue>', the developer will review the chat logs after the test]")
+task.wait(7)
 
 task.spawn(function()
     while true do
@@ -87,10 +89,7 @@ task.spawn(function()
         task.wait(0.1)
     end
 end)
-
-task.wait(3)
-sendchat("[This is a bot, if there are any issues during its presence please say '-report <issue>', the developer will review the chat logs after the test]")
-task.wait()
+task.wait(1)
 sendchat("{debug} WAIT 180")
 task.wait(181)
 print("finding new server...")
