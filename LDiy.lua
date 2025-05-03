@@ -1,3 +1,4 @@
+--loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/LDiy.lua"))()
 local getconnections = getconnections or get_signal_cons
 if getconnections then
     for _, v in pairs(getconnections(game:GetService("ScriptContext").Error)) do
@@ -11823,7 +11824,7 @@ addcmd("clearchat", {'cc', 'chatclear','chatc'}, function(args, LocalPlayer)
 	if args[1] and args[1] ~= nil and args[1] ~= "" and args[1] ~= " " then
 	    local blob = "\u{000D}" 
     	local message = "".. blob:rep(100)
-    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]\n[Message: '..table.concat(args, " ")..']')
+    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]'..blob..'[Message: '..table.concat(args, " ")..']')
 	else
 		local blob = "\u{000D}" 
     	local message = "".. blob:rep(100)
