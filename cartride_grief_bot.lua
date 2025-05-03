@@ -17,30 +17,45 @@ workspace.DescendantAdded:Connect(function(v)
     end
 end)
 
-local function setCanCollideOfModelDescendants(model, bval)
-    if not model then
-        return
-    end
-    for i, v in pairs(model:GetDescendants()) do
-        if v:IsA("BasePart") then
-            v.CanCollide = bval
+do
+    local function setCanCollideOfModelDescendants(model, bval)
+        if not model then
+            return
+        end
+        for i, v in pairs(model:GetDescendants()) do
+            if v:IsA("BasePart") then
+                v.CanCollide = bval
+            end
         end
     end
-end
 
-for i, v in pairs(game.Players:GetPlayers()) do
-    if v ~= game.Players.LocalPlayer then
-        game:GetService("RunService").Stepped:Connect(function()
-            setCanCollideOfModelDescendants(v.Character, false)
-        end)
+    for i, v in pairs(game.Players:GetPlayers()) do
+        if v ~= game.Players.LocalPlayer then
+            game:GetService("RunService").Stepped:Connect(function()
+                setCanCollideOfModelDescendants(v.Character, false)
+            end)
+        end
     end
+
+    game.Players.PlayerAdded:Connect(function(plr)
+        game:GetService("RunService").Stepped:Connect(function()
+            setCanCollideOfModelDescendants(plr.Character, false)
+        end)
+    end)
 end
 
-game.Players.PlayerAdded:Connect(function(plr)
-    game:GetService("RunService").Stepped:Connect(function()
-        setCanCollideOfModelDescendants(plr.Character, false)
-    end)
-end)
+do
+    local function spin()
+        local Spin = Instance.new("BodyAngularVelocity")
+        Spin.Name = "Spinning"
+        Spin.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+        Spin.MaxTorque = Vector3.new(0, math.huge, 0)
+        Spin.AngularVelocity = Vector3.new(0,4,0)
+    end
+
+    game.Players.LocalPlayer.CharacterAdded:Connect(spin)
+    spin()
+end
 
 sendchat("Hello people!")
 task.wait(0.5)
