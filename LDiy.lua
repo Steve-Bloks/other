@@ -11823,7 +11823,7 @@ addcmd("clearchat", {'cc', 'chatclear','chatc'}, function(args, LocalPlayer)
 	if args[1] and args[1] ~= nil and args[1] ~= "" and args[1] ~= " " then
 	    local blob = "\u{000D}" 
     	local message = "".. blob:rep(100)
-    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]\n[Message: '..args[1]..']')
+    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]\n[Message: '..table.concat(args, " ")..']')
 	else
 		local blob = "\u{000D}" 
     	local message = "".. blob:rep(100)
