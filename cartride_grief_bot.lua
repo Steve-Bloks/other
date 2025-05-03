@@ -1,5 +1,5 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
-print("2")
+print("3")
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
 local function sendchat(str) if isChatLegacy then chatRemote:FireServer(str, "All") else chatChannel:SendAsync(str) end end
@@ -57,6 +57,12 @@ do
     game.Players.LocalPlayer.CharacterAdded:Connect(spin)
     spin()
 end
+
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(310.417419, 855.799927, 322.503387, 0.999758244, 1.91938729e-10, -0.021988906, -1.56461066e-10, 1, 1.61515468e-09, 0.021988906, -1.61132374e-09, 0.999758244)
+task.wait(1.5)
+game.Players.LocalPlayer.Character.Humanoid.Health = 0
+game.Players.LocalPlayer.CharacterAdded:Wait()
+task.wait(0.2
 
 sendchat("Hello people!")
 task.wait(0.5)
