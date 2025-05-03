@@ -1,7 +1,7 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
 
 task.wait(8)
-print("16")
+print("17")
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
