@@ -103,7 +103,7 @@ if body and body.data then
 end
 
 if #servers > 0 then
-    sendchat("{debug} teleporting to new instance...")
+    sendchat("{debug} teleporting to new instance")
     queue_on_teleport("loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()"); task.wait(4)
     game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], game.Players.LocalPlayer)
 else
