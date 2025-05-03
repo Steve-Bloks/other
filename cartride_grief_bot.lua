@@ -1,7 +1,7 @@
 --loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/cartride_grief_bot.lua'))()
 
 task.wait(8)
-print("15")
+print("16")
 local isChatLegacy = (game.TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
 httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local chatRemote = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
@@ -73,7 +73,7 @@ task.wait(0.5)
 sendchat("Hello people!")
 task.wait(0.5)
 sendchat("Going forward in your carts is no longer allowed! Please only go backwards.")
-task.wait(2)
+task.wait(8)
 
 task.spawn(function()
     while true do
