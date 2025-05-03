@@ -1994,7 +1994,7 @@ function chatsend(str)
 end
 
 game.Players.PlayerAdded:Connect(function(plr)
-	if plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
+	if plr and plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
 				if isChatLegacy then
@@ -2008,10 +2008,10 @@ game.Players.PlayerAdded:Connect(function(plr)
 			end
 		end)
 	end
-end
+end)
 
-for _, p in game.Players:GetPlayers() do
-	if plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
+for _, plr in game.Players:GetPlayers() do
+	if plr and plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
 				if isChatLegacy then
