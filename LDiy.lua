@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.7'
+currentVersion = '1.7.8'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -4608,6 +4608,7 @@ CMDs[#CMDs + 1] = {NAME = 'hideldiy / hideui', DESC = 'Hides the main UI'}
 CMDs[#CMDs + 1] = {NAME = 'showldiy / unhideldiy / showui / unhideui', DESC = 'Shows the UI again'}
 CMDs[#CMDs + 1] = {NAME = 'keepldiy / keepldiy', DESC = 'Auto execute LuaDev\'s Infinite Yield when you teleport through servers'}
 CMDs[#CMDs + 1] = {NAME = 'unkeepldiy / unkeepldiy', DESC = 'Disable keepldiy'}
+CMDs[#CMDs + 1] = {NAME = 'fakeout', DESC = 'TP to the void and then back (useful to kill people attached to you)'}
 CMDs[#CMDs + 1] = {NAME = 'togglekeepldiy / toggleunkeepldiy', DESC = 'Toggle keepldiy'}
 CMDs[#CMDs + 1] = {NAME = 'killldiy / killldiy', DESC = 'Kills LuaDev\'s Infinite Yield'}
 CMDs[#CMDs + 1] = {NAME = 'savegame / saveplace', DESC = 'Uses saveinstance to save the game'}
@@ -4863,6 +4864,7 @@ CMDs[#CMDs + 1] = {NAME = 'unwalkfling / unwfling', DESC = 'Fling people while w
 CMDs[#CMDs + 1] = {NAME = 'clickfling / cfling / mousefling', DESC = 'Click to fling players, the chance of success will depends on your ping'}
 CMDs[#CMDs + 1] = {NAME = 'unclickfling / uncfling / unmousefling', DESC = 'Turn off clickfling'}
 CMDs[#CMDs + 1] = {NAME = 'fling / spinfling', DESC = 'Flings anyone you touch'}
+CMDs[#CMDs + 1] = {NAME = 'flingplayer [player]', DESC = 'Attempts to fling the target player'}
 CMDs[#CMDs + 1] = {NAME = 'unfling / unspinfling', DESC = 'Disables the fling command'}
 CMDs[#CMDs + 1] = {NAME = 'flyfling [speed]', DESC = 'Basically the invisfling command but not invisible'}
 CMDs[#CMDs + 1] = {NAME = 'unflyfling', DESC = 'Disables the flyfling command'}
@@ -7148,7 +7150,6 @@ addcmd("clickfling", {"cfling", "mousefling"}, function(args, speaker)
             local Targets = {PlayerName}
             local AllBool = false
 
-            -- Function to get player by name
             local function GetPlayer(Name)
                 Name = Name:lower()
                 if Name == "all" or Name == "others" then
@@ -13299,91 +13300,135 @@ end)
 
 flinging = false
 
-addcmd('fling', {'spinfling'}, function(args, speaker)
-    local playerNames = getPlayer(args[1], speaker)
-    local targetPlayer = nil
-
-    for _, name in pairs(playerNames) do
-        local player = Players:FindFirstChild(name)
-        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            targetPlayer = player
-            break
-        end
-    end
-
-    local root = getRoot(speaker.Character)
-    if not root then return end
-
-    local originalPosition = root.Position
-
-    for _, part in pairs(speaker.Character:GetDescendants()) do
-        if part:IsA("BasePart") then
-            part.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
-        end
-    end
-
+addcmd('fling',{},function(args, speaker)
+	flinging = false
+	for _, child in pairs(speaker.Character:GetDescendants()) do
+		if child:IsA("BasePart") then
+			child.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
+		end
+	end
 	execCmd('noclip nonotify')
+	task.wait(0.1)
+	local bambam = Instance.new("BodyAngularVelocity")
+	bambam.Name = randomString()
+	bambam.Parent = getRoot(speaker.Character)
+	bambam.AngularVelocity = Vector3.new(0,99999,0)
+	bambam.MaxTorque = Vector3.new(0,math.huge,0)
+	bambam.P = math.huge
+	local Char = speaker.Character:GetChildren()
+	for i, v in next, Char do
+		if v:IsA("BasePart") then
+			v.CanCollide = false
+			v.Massless = true
+			v.Velocity = Vector3.new(0, 0, 0)
+		end
+	end
+	flinging = true
+	local function flingDiedF()
+		execCmd('unfling')
+	end
+	flingDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(flingDiedF)
+	repeat
+		bambam.AngularVelocity = Vector3.new(0,99999,0)
+		task.wait(0.2)
+		bambam.AngularVelocity = Vector3.new(0,0,0)
+		task.wait(0.1)
+	until flinging == false
+end)
 
-    task.wait(0.1)
+addcmd('flingplayer', {'flingtarget', 'flingp'}, function(args, speaker)
+    local targetPlayers = getPlayer(args[1], speaker)
+    local targetPlayer = game.Players:FindFirstChild(targetPlayers[1])
+    if not targetPlayer then return end
+    print(targetPlayer)
+    print(targetPlayer.Character)
 
-    local bav = Instance.new("BodyAngularVelocity")
-    bav.Name = randomString()
-    bav.Parent = root
-    bav.AngularVelocity = Vector3.new(0, 99999, 0)
-    bav.MaxTorque = Vector3.new(0, math.huge, 0)
-    bav.P = math.huge
+    local targetRoot = targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if not targetRoot then
+        warn("Target's HumanoidRootPart not found!")
+        return
+    end
 
-    for _, v in pairs(speaker.Character:GetChildren()) do
-        if v:IsA("BasePart") then
-            v.CanCollide = false
-            v.Massless = true
-            v.Velocity = Vector3.zero
+    local flingPlayerRoot = speaker.Character:FindFirstChild("HumanoidRootPart")
+    if not flingPlayerRoot then return end
+    local originalPosition = flingPlayerRoot.Position
+
+    local lastPosition = targetRoot.Position
+    local lastVelocity = targetRoot.AssemblyLinearVelocity
+
+    local timer = 6
+    local connection
+
+    execCmd('fling')
+
+    connection = game:GetService("RunService").Stepped:Connect(function(_, dt)
+        if not targetPlayer or not targetRoot or not targetRoot.Parent then
+            connection:Disconnect()
+            execCmd('unfling')
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.CFrame = CFrame.new(originalPosition)
         end
-    end
 
-    flinging = true
+        local currentPosition = targetRoot.Position
+        local currentVelocity = targetRoot.AssemblyLinearVelocity
 
-    local function stopFling()
-        flinging = false
+        local predictionTime = 0.15
+        local predictedPosition = currentPosition + currentVelocity * predictionTime
+
+        
+        if flingPlayerRoot then
+            flingPlayerRoot.CFrame = CFrame.new(predictedPosition)
+        end
+
+        lastPosition = currentPosition
+        lastVelocity = currentVelocity
+
+        timer = timer - dt
+        if timer <= 0 then
+            connection:Disconnect()
+            execCmd('unfling')
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+            flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+            flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+        end
+    end)
+
+    targetPlayer.Character.Destroying:Once(function()
+        connection:Disconnect()
         execCmd('unfling')
-		root.Velocity = Vector3.new(0, 0, 0)
-		execCmd('unnoclip nonotify')
-        if bav then bav:Destroy() end
-    end
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+    end)
 
-    local humanoid = speaker.Character:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        humanoid.Died:Connect(stopFling)
-    end
-
-    if targetPlayer then
-        local thrp = getRoot(targetPlayer.Character)
-
-        task.spawn(function()
-            while flinging and humanoid and humanoid.Health > 0 and targetPlayer.Character:FindFirstChild("Humanoid").Health > 0 do
-                root.Position = thrp.Position + (targetPlayer.Character:FindFirstChild("Humanoid").MoveDirection * 3)
-                task.wait(0.1)
-            end
-        end)
-
-        task.spawn(function()
-            task.wait(10)
-            if flinging then
-                stopFling()
-                root.Position = originalPosition
-            end
-        end)
-    else
-        task.spawn(function()
-            while flinging do
-                bav.AngularVelocity = Vector3.new(0, 99999, 0)
-                task.wait(0.2)
-                bav.AngularVelocity = Vector3.zero
-                task.wait(0.1)
-            end
-            stopFling()
-        end)
-    end
+    targetPlayer.Character.Humanoid.Died:Once(function()
+        connection:Disconnect()
+        execCmd('unfling')
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+        flingPlayerRoot.Velocity = Vector3.new(0,0,0)
+        flingPlayerRoot.CFrame = CFrame.new(originalPosition)
+    end)
 end)
 
 addcmd('unfling',{'nofling', 'unspinfling', 'nospinfling'},function(args, speaker)
@@ -13479,6 +13524,19 @@ addcmd('invisfling',{},function(args, speaker)
     bambam.Parent = getRoot(speaker.Character)
     bambam.Force = Vector3.new(99999,99999*10,99999)
     bambam.Location = getRoot(speaker.Character).Position
+end)
+
+OrgDestroyHeight = workspace.FallenPartsDestroyHeight
+addcmd("fakeout", {}, function(args, speaker)
+    local root = getRoot(speaker.Character)
+    local oldpos = root.CFrame
+    workspace.FallenPartsDestroyHeight = 0/1/0
+    root.CFrame = CFrame.new(Vector3.new(0, OrgDestroyHeight - 25, 0))
+    wait(0.5)
+    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+    task.wait(0.5)
+    root.CFrame = oldpos
+    workspace.FallenPartsDestroyHeight = OrgDestroyHeight
 end)
 
 function attach(speaker,target)
