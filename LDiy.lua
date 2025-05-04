@@ -13536,7 +13536,7 @@ addcmd("fakeout", {}, function(args, speaker)
 	local m = Instance.new("Message", game.Workspace)
 	m.Text = "Voiding..."
     game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
-	game.Players.LocalPlayer.Character.Humanoid.Sitting = false
+	game.Players.LocalPlayer.Character.Humanoid.Sit = false
     task.wait(0.5)
 	m:Destroy()
     root.CFrame = oldpos
