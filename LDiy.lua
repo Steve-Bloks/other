@@ -26,7 +26,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.3'
+currentVersion = '1.7.4'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13588,7 +13588,7 @@ end
 -- // Commands \\ --
 
 -- guess how many ct.CFrame = hrp.CFrame there ARE! --
-if PlaceId == 574746640 then
+if PlaceId == 574746640 or PlaceId == 15965875578 then
     local gameTools = workspace.Tools
     local chests = {
         Chest_Invisibility_Cloak = gameTools.Chest_Invisibility_Cloak,
