@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.9'
+currentVersion = '1.7.8'
 
 local guiScale = 1 -- lazy fix for bug lol
 
