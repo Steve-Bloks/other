@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.4'
+currentVersion = '1.7.5'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13303,7 +13303,6 @@ addcmd('fling', {'spinfling'}, function(args, speaker)
     local playerNames = getPlayer(args[1], speaker)
     local targetPlayer = nil
 
-    -- Try to resolve the first matching player from names
     for _, name in pairs(playerNames) do
         local player = Players:FindFirstChild(name)
         if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
@@ -13315,14 +13314,16 @@ addcmd('fling', {'spinfling'}, function(args, speaker)
     local root = getRoot(speaker.Character)
     if not root then return end
 
-    -- Set up physical properties
     for _, part in pairs(speaker.Character:GetDescendants()) do
         if part:IsA("BasePart") then
             part.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
         end
     end
 
-    execCmd('noclip nonotify')
+    if not targetPlayer then
+        execCmd('noclip nonotify')
+    end
+
     task.wait(0.1)
 
     local bav = Instance.new("BodyAngularVelocity")
@@ -13354,17 +13355,15 @@ addcmd('fling', {'spinfling'}, function(args, speaker)
     end
 
     if targetPlayer then
-        -- Fling with tracking
         local thrp = getRoot(targetPlayer.Character)
         task.spawn(function()
             while flinging and humanoid and humanoid.Health > 0 and targetPlayer.Character:FindFirstChild("Humanoid").Health > 0 do
-                root.CFrame = thrp.CFrame + (targetPlayer.Character:FindFirstChild("Humanoid").MoveDirection * 3)
+                root.Position = thrp.Position + (targetPlayer.Character:FindFirstChild("Humanoid").MoveDirection * 3)
                 task.wait(0.1)
             end
             stopFling()
         end)
     else
-        -- No target: spin in place
         task.spawn(function()
             while flinging do
                 bav.AngularVelocity = Vector3.new(0, 99999, 0)
