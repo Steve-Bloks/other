@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.2'
+currentVersion = '1.7.3'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13298,41 +13298,73 @@ addcmd('joinlogs',{'jlogs'},function(args, speaker)
 end)
 
 flinging = false
-addcmd('fling',{'spinfling'},function(args, speaker)
-    flinging = false
-    for _, child in pairs(speaker.Character:GetDescendants()) do
-        if child:IsA("BasePart") then
-            child.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
+
+addcmd('fling', {'spinfling'}, function(args, speaker)
+    local targetName = args[1]
+    local target = getplr(targetName)
+
+    local root = getRoot(speaker.Character)
+    if not root then return end
+
+    for _, part in pairs(speaker.Character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
         end
     end
+
     execCmd('noclip nonotify')
-    task.wait(.1)
-    local bambam = Instance.new("BodyAngularVelocity")
-    bambam.Name = randomString()
-    bambam.Parent = getRoot(speaker.Character)
-    bambam.AngularVelocity = Vector3.new(0,99999,0)
-    bambam.MaxTorque = Vector3.new(0,math.huge,0)
-    bambam.P = math.huge
-    local Char = speaker.Character:GetChildren()
-    for i, v in next, Char do
+    task.wait(0.1)
+
+    local bav = Instance.new("BodyAngularVelocity")
+    bav.Name = randomString()
+    bav.Parent = root
+    bav.AngularVelocity = Vector3.new(0, 99999, 0)
+    bav.MaxTorque = Vector3.new(0, math.huge, 0)
+    bav.P = math.huge
+
+    for _, v in pairs(speaker.Character:GetChildren()) do
         if v:IsA("BasePart") then
             v.CanCollide = false
             v.Massless = true
             v.Velocity = Vector3.zero
         end
     end
+
     flinging = true
-    local function flingDiedF()
+
+    local function stopFling()
+        flinging = false
         execCmd('unfling')
+        if bav then bav:Destroy() end
     end
-    flingDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(flingDiedF)
-    repeat
-        bambam.AngularVelocity = Vector3.new(0,99999,0)
-        task.wait(.2)
-        bambam.AngularVelocity = Vector3.zero
-        task.wait(.1)
-    until flinging == false
+
+    local humanoid = speaker.Character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.Died:Connect(stopFling)
+    end
+
+    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local thrp = getRoot(target.Character)
+        task.spawn(function()
+            while flinging and humanoid and humanoid.Health > 0 and target.Character:FindFirstChild("Humanoid").Health > 0 do
+                root.CFrame = thrp.CFrame + (target.Character:FindFirstChild("Humanoid").MoveDirection * 3)
+                task.wait(0.1)
+            end
+            stopFling()
+        end)
+    else
+        task.spawn(function()
+            while flinging do
+                bav.AngularVelocity = Vector3.new(0, 99999, 0)
+                task.wait(0.2)
+                bav.AngularVelocity = Vector3.zero
+                task.wait(0.1)
+            end
+            stopFling()
+        end)
+    end
 end)
+
 
 addcmd('unfling',{'nofling', 'unspinfling', 'nospinfling'},function(args, speaker)
     execCmd('clip nonotify')
