@@ -4840,7 +4840,7 @@ CMDs[#CMDs + 1] = {NAME = 'rolewatch [group id] [role name]', DESC = 'Notify if 
 CMDs[#CMDs + 1] = {NAME = 'rolewatchstop / unrolewatch', DESC = 'Disable Rolewatch'}
 CMDs[#CMDs + 1] = {NAME = 'rolewatchleave', DESC = 'Toggle if you should leave the game if someone from a watched group joins the server'}
 CMDs[#CMDs + 1] = {NAME = 'attach [player] (TOOL)', DESC = 'Attaches you to a player (YOU NEED A TOOL)'}
-if PlaceId == 574746640 then
+if PlaceId == 574746640 or PlaceId == 15965875578 then
     CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
     CMDs[#CMDs + 1] = {NAME = '-- 4nn1\'s Place --', DESC = 'Commands for 4nn1\'s Place'}
     CMDs[#CMDs + 1] = {NAME = 'kill [player]', DESC = 'Attempts to kill a player'}
@@ -13532,10 +13532,6 @@ addcmd('kill',{'fekill'},function(args, speaker)
     end
 end)
 
---[[ 4nn1's Place: START ]] --
-
--- // Functions \\ --
-
 local random = Random.new()
 local nextInteger = random.NextInteger
 
@@ -15108,7 +15104,7 @@ task.spawn(function()
         notify("Unstable Device", "On mobile, Infinite Yield Reborn has a lot of bugs. It's recommended to use a PC executor")
         task.wait(3)
     end
-    if PlaceId == 574746640 then
+    if PlaceId == 574746640 or PlaceId == 15965875578 then
         notify("4nn1's Place", "Game Detected! Some commands were added/changed/removed")
 	end
 	if PlaceId == 357766274 then
