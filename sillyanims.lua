@@ -240,7 +240,7 @@ FakeCharacter.Parent = workspace
 
 local rig = animationplayer.LoadDummy(FakeCharacter)
 
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 7
+task.defer(function() task.wait(4) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 7 end)
 
 task.spawn(function()
 	for _, LS in ipairs(FakeCharacter:GetChildren()) do
