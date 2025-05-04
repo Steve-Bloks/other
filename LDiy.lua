@@ -13533,9 +13533,12 @@ addcmd("fakeout", {}, function(args, speaker)
     workspace.FallenPartsDestroyHeight = 0/1/0
     root.CFrame = CFrame.new(Vector3.new(0, OrgDestroyHeight - 25, 0))
     wait(0.5)
+	local m = Instance.new("Message", game.Workspace)
+	m.Text = "Voiding..."
     game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
 	game.Players.LocalPlayer.Character.Humanoid.Sitting = false
     task.wait(0.5)
+	m:Destroy()
     root.CFrame = oldpos
     workspace.FallenPartsDestroyHeight = OrgDestroyHeight
 end)
