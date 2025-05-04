@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.6'
+currentVersion = '1.7.7'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13346,6 +13346,8 @@ addcmd('fling', {'spinfling'}, function(args, speaker)
     local function stopFling()
         flinging = false
         execCmd('unfling')
+		root.Velocity = Vector3.new(0, 0, 0)
+		execCmd('unnoclip nonotify')
         if bav then bav:Destroy() end
     end
 
