@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.8'
+currentVersion = '1.7.9'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -15222,5 +15222,15 @@ task.spawn(function()
 	end
 	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected!\nRun \";DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
+	end
+end)
+
+Players.LocalPlayer.Chatted:Connect(function(msg)
+	if msg:sub(1, 1) == prefix then
+		local withoutPrefix = msg:sub(#prefix + 1)
+		local cmd, args = withoutPrefix:match("^(%S+)%s*(.*)")
+		if cmd then
+			execCmd(cmd.." "..args)
+		end
 	end
 end)
