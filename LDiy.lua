@@ -26,7 +26,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.5'
+currentVersion = '1.7.6'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13315,15 +13315,15 @@ addcmd('fling', {'spinfling'}, function(args, speaker)
     local root = getRoot(speaker.Character)
     if not root then return end
 
+    local originalPosition = root.Position
+
     for _, part in pairs(speaker.Character:GetDescendants()) do
         if part:IsA("BasePart") then
             part.CustomPhysicalProperties = PhysicalProperties.new(math.huge, 0.3, 0.5)
         end
     end
 
-    if not targetPlayer then
-        execCmd('noclip nonotify')
-    end
+	execCmd('noclip nonotify')
 
     task.wait(0.1)
 
@@ -13357,12 +13357,20 @@ addcmd('fling', {'spinfling'}, function(args, speaker)
 
     if targetPlayer then
         local thrp = getRoot(targetPlayer.Character)
+
         task.spawn(function()
             while flinging and humanoid and humanoid.Health > 0 and targetPlayer.Character:FindFirstChild("Humanoid").Health > 0 do
                 root.Position = thrp.Position + (targetPlayer.Character:FindFirstChild("Humanoid").MoveDirection * 3)
                 task.wait(0.1)
             end
-            stopFling()
+        end)
+
+        task.spawn(function()
+            task.wait(10)
+            if flinging then
+                stopFling()
+                root.Position = originalPosition
+            end
         end)
     else
         task.spawn(function()
