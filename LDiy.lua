@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.0'
+currentVersion = '1.8.1'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -11609,7 +11609,7 @@ end)
 
 addcmd('islerifepro',{},function(args, speaker)
 	notify('Is LeRiFe15327 pro?', 'HELL NO')
-end
+end)
 
 addcmd('audiologger',{'alogger'},function(args, speaker)
     notify("Loading",'Hold on a sec')
