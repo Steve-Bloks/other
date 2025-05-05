@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.1'
+currentVersion = '1.8.2'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -1472,7 +1472,7 @@ PluginsHint.Position = UDim2.new(0, 25, 0, 40)
 PluginsHint.Size = UDim2.new(0, 200, 0, 50)
 PluginsHint.Font = Enum.Font.SourceSansItalic
 PluginsHint.TextSize = 16
-PluginsHint.Text = "Download plugins from the IY's discord server (ours is gonna come soon.)"
+PluginsHint.Text = "Download plugins from the IY's discord server, or make your own!"
 PluginsHint.TextColor3 = Color3.new(1, 1, 1)
 PluginsHint.TextStrokeColor3 = Color3.new(1, 1, 1)
 PluginsHint.TextWrapped = true
@@ -4570,6 +4570,7 @@ end
 CMDs = {}
 CMDs[#CMDs + 1] = {NAME = 'guiscale [number]', DESC = 'Changes the size of the gui. [number] accepts both decimals and whole numbers. Min is 0.4 and Max is 2'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox console'}
+CMDs[#CMDs + 1] = {NAME = 'toggleresurrection', DESC =  'Teleports your player to where you died'}
 CMDs[#CMDs + 1] = {NAME = 'killroblox', DESC = 'Kills Roblox process'}
 CMDs[#CMDs + 1] = {NAME = 'unc / unctest / unccheckevn', DESC = 'Tests all UNC Environment, by vxsty'}
 CMDs[#CMDs + 1] = {NAME = 'sunc / sunctest / sunccheckevn', DESC = 'Tests all UNC Environment strictly, credits will be printed'}
@@ -7880,6 +7881,36 @@ addcmd('togglefloat',{},function(args, speaker)
     else
         execCmd('float')
     end
+end)
+
+local resurrecting = false
+local resloop = nil
+addcmd('toggleresurrection', {}, function(args, speaker)
+	resurrecting = not resurrecting
+	if resurrecting and speaker and speaker.Character and speaker.Character:FindFirstChild("Humanoid") then
+		resloop = speaker.Character:FindFirstChild("Humanoid").Died:Connect(function()
+			local hrp = speaker.Character:FindFirstChild("HumanoidRootPart")
+			if not hrp then return end
+			local pos = hrp.CFrame
+			speaker.CharacterAdded:Wait()
+			local newChar = speaker.Character
+			if newChar then
+				local success = false
+				repeat
+					local newHRP = newChar:FindFirstChild("HumanoidRootPart")
+					if newHRP then
+						success = true
+						newHRP.CFrame = pos
+					else
+						task.wait()
+					end
+				until success
+			end
+		end)
+	elseif not resurrecting and resloop ~= nil then
+		resloop:Disconnect()
+		resloop = nil
+	end
 end)
 
 swimming = false
