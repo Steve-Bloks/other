@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.2'
+currentVersion = '1.8.3'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -7907,9 +7907,11 @@ addcmd('toggleresurrection', {}, function(args, speaker)
 				until success
 			end
 		end)
+		notify("Resurrection", "Enabled!")
 	elseif not resurrecting and resloop ~= nil then
 		resloop:Disconnect()
 		resloop = nil
+		notify("Resurrection", "Disabled!")
 	end
 end)
 
