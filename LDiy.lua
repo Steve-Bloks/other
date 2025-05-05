@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.3'
+currentVersion = '1.8.4'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13571,9 +13571,9 @@ addcmd("fakeout", {}, function(args, speaker)
     local oldpos = root.CFrame
     workspace.FallenPartsDestroyHeight = 0/1/0
     root.CFrame = CFrame.new(Vector3.new(0, OrgDestroyHeight - 25, 0))
-    wait(0.5)
 	local m = Instance.new("Message", game.Workspace)
 	m.Text = "Voiding..."
+    wait(0.5)
     game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
 	game.Players.LocalPlayer.Character.Humanoid.Sit = false
     task.wait(0.5)
