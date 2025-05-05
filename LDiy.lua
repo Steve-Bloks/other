@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.7.9'
+currentVersion = '1.8.0'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -4588,6 +4588,8 @@ CMDs[#CMDs + 1] = {NAME = 'serverhop / shop', DESC = 'Teleports you to a differe
 CMDs[#CMDs + 1] = {NAME = 'gameteleport / gametp [place ID]', DESC = 'Joins a game by ID'}
 CMDs[#CMDs + 1] = {NAME = 'antiidle / antiafk', DESC = 'Prevents the game from kicking you for being idle/afk'}
 CMDs[#CMDs + 1] = {NAME = 'datalimit [num]', DESC = 'Set outgoing KBPS limit'}
+CMDs[#CMDs + 1] = {NAME = 'hydroxide', DESC = 'Load hydroxide'}
+CMDs[#CMDs + 1] = {NAME = 'isLerifePro', DESC = 'Is he?'}
 CMDs[#CMDs + 1] = {NAME = 'replicationlag / backtrack [num]', DESC = 'Set IncomingReplicationLag'}
 CMDs[#CMDs + 1] = {NAME = 'creatorid / creator', DESC = 'Notifies you the creators ID'}
 CMDs[#CMDs + 1] = {NAME = 'copycreatorid / copycreator', DESC = 'Copies the creators ID to your clipboard'}
@@ -11604,6 +11606,10 @@ addcmd('hydroxide',{'hspy'},function(args, speaker)
     notify("Loading",'Hold on a sec')
     loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/hydroxidewrapper.lua"))()
 end)
+
+addcmd('islerifepro',{},function(args, speaker)
+	notify('Is LeRiFe15327 pro?', 'HELL NO')
+end
 
 addcmd('audiologger',{'alogger'},function(args, speaker)
     notify("Loading",'Hold on a sec')
