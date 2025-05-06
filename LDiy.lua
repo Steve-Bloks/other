@@ -1993,7 +1993,7 @@ function chatsend(str)
     end
 end
 
-game.Players.PlayerAdded:Connect(function(plr)
+--[[game.Players.PlayerAdded:Connect(function(plr)
 	if plr and (plr.Name == "hookmetamethod_hook" or plr.Name == "Steve_Bloks" or plr.Name == "LeRiFe15327") and game.Players.LocalPlayer.Name ~= "hookmetamethod_hook" and game.Players.LocalPlayer.Name ~= "Steve_Bloks" and game.Players.LocalPlayer.Name ~= "LeRiFe15327" then
 		plr.Chatted:Connect(function(msg)
 			if msg == ".ldiy_identify" then
@@ -2023,7 +2023,7 @@ for _, plr in game.Players:GetPlayers() do
 			end
 		end)
 	end
-end
+end]]
 
 function writefileExploit()
     if writefile then
@@ -11894,11 +11894,11 @@ addcmd("clearchat", {'cc', 'chatclear','chatc'}, function(args, LocalPlayer)
 	if args[1] and args[1] ~= nil and args[1] ~= "" and args[1] ~= " " then
 	    local blob = "\u{000D}" 
     	local message = "".. blob:rep(100)
-    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]'..blob..'[Message: '..table.concat(args, " ")..']')
+    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]'..blob..'[Message: '..table.concat(args, " ")..']'..blob)
 	else
 		local blob = "\u{000D}" 
     	local message = "".. blob:rep(100)
-    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]')
+    	chatsend(message .. '[Chat Cleared by LuaDev\'s IY]'..blob)
 	end
 end)
 
