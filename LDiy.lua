@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.6'
+currentVersion = '1.8.7'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -11356,6 +11356,10 @@ addcmd('DisableCustomAnticheat',{},function(args, speaker)
 		end
 		task.wait()
 		if ac then ac:Destroy(); notify("InSOnI anticheat disabler", "Successfully deleted anticheat script.") else notify("InSOnI anticheat disabler", "Something went wrong while trying to find anticheat script, please notify developer.") end
+	elseif args[1]:lower() == "therapy" then
+		game.Players.LocalPlayer.Character:FindFirstChild("LocalScript"):Destroy()
+		game.Players.LocalPlayer.CharacterAdded:Connect(function(char) task.wait(1); char:FindFirstChild("LocalScript"):Destroy() end)
+		notify("Therapy anticheat disabler", "Deleted anticheat script")
 	else
 		notify("Missing Exploit", "There is no available exploit for "..args[1]..", if you have one you can contact the developer.")
 	end
@@ -15279,6 +15283,9 @@ task.spawn(function()
 	end
 	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected!\nRun \";DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
+	end
+	if PlaceId == 8286149869 then
+		notify("Therapy 🔊", "Game Detected!\nRun \";DisableCustomAnticheat therapy\" to disable Therapy 🔊\'s anticheat.")
 	end
 end)
 
