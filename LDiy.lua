@@ -15282,10 +15282,10 @@ task.spawn(function()
         notify("4nn1's Place", "Game Detected! Some commands were added/changed/removed")
 	end
 	if PlaceId == 357766274 then
-		notify("InSOnI v3", "Game Detected!\nRun \";DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
+		notify("InSOnI v3", "Game Detected!\nRun \"DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
 	end
 	if PlaceId == 8286149869 then
-		notify("Therapy 🔊", "Game Detected!\nRun \";DisableCustomAnticheat therapy\" to disable Therapy 🔊\'s anticheat.")
+		notify("Therapy 🔊", "Game Detected!\nRun \"DisableCustomAnticheat therapy\" to disable Therapy 🔊\'s anticheat.")
 	end
 end)
 
