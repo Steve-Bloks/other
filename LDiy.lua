@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.5'
+currentVersion = '1.8.6'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -7908,7 +7908,7 @@ addcmd('toggleresurrection', {}, function(args, speaker)
 							if newHRP then
 								success = true
 								newHRP.CFrame = savedCFrame
-								notify("Resurrection", "You have respawned at your death location.")
+								notify("Resurrection", "You have been placed at your death location")
 							else
 								task.wait()
 							end
