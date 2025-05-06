@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.4'
+currentVersion = '1.8.5'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -7884,33 +7884,51 @@ addcmd('togglefloat',{},function(args, speaker)
 end)
 
 local resurrecting = false
-local resloop = nil
+local charconn, deathconn = nil, nil
 addcmd('toggleresurrection', {}, function(args, speaker)
 	resurrecting = not resurrecting
-	if resurrecting and speaker and speaker.Character and speaker.Character:FindFirstChild("Humanoid") then
-		resloop = speaker.Character:FindFirstChild("Humanoid").Died:Connect(function()
-			local hrp = speaker.Character:FindFirstChild("HumanoidRootPart")
-			if not hrp then return end
-			local pos = hrp.CFrame
-			speaker.CharacterAdded:Wait()
-			local newChar = speaker.Character
-			if newChar then
-				local success = false
-				repeat
-					local newHRP = newChar:FindFirstChild("HumanoidRootPart")
-					if newHRP then
-						success = true
-						newHRP.CFrame = pos
-					else
-						task.wait()
+	local function disconnectAll()
+		if charconn then charconn:Disconnect() end
+		if deathconn then deathconn:Disconnect() end
+		charconn, deathconn = nil, nil
+	end
+	if resurrecting and speaker then
+		local function hookCharacter(char)
+			local humanoid = char:FindFirstChildOfClass("Humanoid")
+			local hrp = char:FindFirstChild("HumanoidRootPart")
+			if humanoid and hrp then
+				deathconn = humanoid.Died:Connect(function()
+					local savedCFrame = hrp.CFrame
+					speaker.CharacterAdded:Wait()
+					local newChar = speaker.Character
+					if newChar then
+						local success = false
+						repeat
+							local newHRP = newChar:FindFirstChild("HumanoidRootPart")
+							if newHRP then
+								success = true
+								newHRP.CFrame = savedCFrame
+								notify("Resurrection", "You have respawned at your death location.")
+							else
+								task.wait()
+							end
+						until success
+						hookCharacter(newChar)
 					end
-				until success
+				end)
 			end
+		end
+		if speaker.Character then
+			hookCharacter(speaker.Character)
+		end
+		charconn = speaker.CharacterAdded:Connect(function(char)
+			if deathconn then deathconn:Disconnect() end
+			task.wait(0.1)
+			hookCharacter(char)
 		end)
 		notify("Resurrection", "Enabled!")
-	elseif not resurrecting and resloop ~= nil then
-		resloop:Disconnect()
-		resloop = nil
+	else
+		disconnectAll()
 		notify("Resurrection", "Disabled!")
 	end
 end)
