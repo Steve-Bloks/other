@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.7'
+currentVersion = '1.8.8'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -4845,7 +4845,6 @@ CMDs[#CMDs + 1] = {NAME = 'rolewatchleave', DESC = 'Toggle if you should leave t
 CMDs[#CMDs + 1] = {NAME = 'attach [player] (TOOL)', DESC = 'Attaches you to a player (YOU NEED A TOOL)'}
 if PlaceId == 574746640 then
     CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
-    CMDs[#CMDs + 1] = {NAME = '-- 4nn1\'s Place --', DESC = 'Commands for 4nn1\'s Place'}
     CMDs[#CMDs + 1] = {NAME = 'kill [player]', DESC = 'Attempts to kill a player'}
     CMDs[#CMDs + 1] = {NAME = 'dig / terraindig / removeterrain / digterrain', DESC = 'Attempts to dig part of terrain'}
     CMDs[#CMDs + 1] = {NAME = 'brn / bringnpcs / bringallnpcs / bringall', DESC = 'Attempts to bring npc(s)'}
@@ -4861,6 +4860,10 @@ if PlaceId == 574746640 then
     CMDs[#CMDs + 1] = {NAME = 'unforceday / unforcenight / unfday / unfnight', DESC = ''}
     CMDs[#CMDs + 1] = {NAME = 'gettools / gt', DESC = 'Gets tools'}
     CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
+end
+if PlaceId == 8286149869 then
+	CMDs[#CMDs + 1] = {NAME = 'gotoarea [attic/spawn/basement/painting]', DESC = 'Teleports you to selected area'}
+	CMDs[#CMDs + 1] = {NAME = 'getbadges', DESC = 'Obtains all secret badges'}
 end
 CMDs[#CMDs + 1] = {NAME = 'walkfling / wfling', DESC = 'Fling people while walking around.'}
 CMDs[#CMDs + 1] = {NAME = 'unwalkfling / unwfling', DESC = 'Fling people while walking around.'}
@@ -13714,9 +13717,6 @@ local function isCatOwned(cat)
     return cat.Torso.ReceiveAge == 0
 end
 
--- // Commands \\ --
-
--- guess how many ct.CFrame = hrp.CFrame there ARE! --
 if PlaceId == 574746640 then
     local gameTools = workspace.Tools
     local chests = {
@@ -14025,6 +14025,59 @@ if PlaceId == 574746640 then
 
         --task.spawn(report)
     end)
+end
+
+if PlaceId == 8286149869 then
+	local atticCFrame = CFrame.new(Vector3.new(388, -30, -256.5))
+	local closetCFrame = CFrame.new(Vector3.new(-313.5, 3, -21))
+	local paintingCFrame = CFrame.new(Vector3.new(-399, -20, -39))
+	local basementCFrame = CFrame.new(Vector3.new(-516, -17, -43.5))
+	local spawnCFrame = CFrame.new(Vector3.new(-231, 4, 0))
+	local radioCFrame = CFrame.new(Vector3.new(-286, 3, -8))
+
+	addcmd('gotoarea',{}, function(args, speaker)
+		local area = args[1]
+		if not area then return end
+		local orgCFrame = CFrame
+		if area:lower() == "attic" and speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart") then
+			speaker.Character.HumanoidRootPart.CFrame = atticCFrame
+		elseif area:lower() == "painting" and speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart") then
+			speaker.Character.HumanoidRootPart.CFrame = paintingCFrame
+		elseif area:lower() == "basement" and speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart") then
+			speaker.Character.HumanoidRootPart.CFrame = basementCFrame
+		elseif area:lower() == "spawn" and speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart") then 
+			speaker.Character.HumanoidRootPart.CFrame = spawnCFrame
+		else return end
+	end)
+
+	addcmd('getbadges',{},function(args, speaker)
+		local character = speaker.Character or speaker.CharacterAdded:Wait()
+		local hrp = character:WaitForChild("HumanoidRootPart")
+		hrp.CFrame = closetCFrame
+		task.wait(0.2)
+		fireclickdetector(workspace.Folder2.CD1.ClickDetector)
+		task.wait(0.1)
+		hrp.CFrame = radioCFrame
+		task.wait(0.2)
+		fireproximityprompt(workspace.Radio.Speak.ProximityPrompt)
+		task.wait(0.1)
+		firetouchinterest(hrp, workspace.Room.Ok, false)
+		task.wait(0.1)
+		firetouchinterest(hrp, workspace.Room.Ok, true)
+		task.wait(0.1)
+		firetouchinterest(hrp, workspace.Room.Ok, false)
+		task.wait(0.1)
+		firetouchinterest(hrp, workspace.Home.Oka, false)
+		task.wait(0.1)
+		firetouchinterest(hrp, workspace.Home.Oka, true)
+		task.wait(0.1)
+		firetouchinterest(hrp, workspace.Home.Oka, false)
+		task.wait(0.2)
+		hrp.CFrame = atticCFrame
+		task.wait(0.2)
+		hrp.CFrame = spawnCFrame
+		notify("Therapy 🔊", "You should have all badges, if something went wrong please run the command again or report it to the developer."
+	end)
 end
 
 local hb = RunService.Heartbeat
@@ -15234,13 +15287,16 @@ task.spawn(function()
         task.wait(3)
     end
     if PlaceId == 574746640 then
-        notify("4nn1's Place", "Game Detected! Some commands were added/changed/removed")
+        notify("4nn1's Place", "Game Detected!\nSome commands were added/changed/removed")
 	end
 	if PlaceId == 357766274 then
 		notify("InSOnI v3", "Game Detected!\nRun \"DisableCustomAnticheat insoni\" to disable InSOnI\'s anticheat.")
 	end
 	if PlaceId == 8286149869 then
 		notify("Therapy 🔊", "Game Detected!\nRun \"DisableCustomAnticheat therapy\" to disable Therapy 🔊\'s anticheat.")
+		task.wait(5)
+		notify("Therapy 🔊", "Game Detected!\nAdded \"getbadges\" and \"gotoarea\"")
+		
 	end
 end)
 
