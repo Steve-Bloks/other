@@ -10690,7 +10690,7 @@ Main = (function()
 		env.safeDecompile = type(decompile) == "function" and decompile
 		env.decompile = env.safeDecompile or (env.getscriptbytecode and env.request and (function()
 			local success, err = pcall(function()
-				loadstring(oldgame:HttpGet("https://raw.githubusercontent.com/infyiff/backup/refs/heads/main/konstant.lua"))()
+				loadstring(oldgame:HttpGet("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/Decompiler.lua"))()
 			end)
 
 			return (success and decompile) or nil
