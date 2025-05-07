@@ -8674,57 +8674,12 @@ addcmd("decompile", {"decompiler"}, function(args, speaker)
         end
 
     elseif option == 2 then
-        if not getscriptbytecode then
-            notify("Error", "Decompiler 2 is not supported on your exploit.")
-            return
-        end
-
-        local API = "http://api.plusgiant5.com"
-        local last_call = 0
-
-        local function call(konstantType, scriptPath)
-            local success, bytecode = pcall(getscriptbytecode, scriptPath)
-
-            if not success then
-                return "Failed to get script bytecode, error:\n\n--[[\n" .. tostring(bytecode) .. "\n--]]"
-            end
-
-            local time_elapsed = os.clock() - last_call
-            if time_elapsed <= 0.5 then
-                task.wait(0.5 - time_elapsed)
-            end
-
-            local httpResult = request({
-                Url = API .. konstantType,
-                Body = bytecode,
-                Method = "POST",
-                Headers = {["Content-Type"] = "text/plain"}
-            })
-            last_call = os.clock()
-
-            if httpResult.StatusCode ~= 200 then
-                return "Error occurred while requesting the API, status: " .. tostring(httpResult.StatusCode) .. "\n\n--[[\n" .. tostring(httpResult.Body) .. "\n--]]"
-            else
-                return httpResult.Body
-            end
-        end
-
-        local function decompile(scriptPath)
-            return call("/konstant/decompile", scriptPath)
-        end
-
-        local function disassemble(scriptPath)
-            return call("/konstant/disassemble", scriptPath)
-        end
-
-        getgenv().decompile = decompile
-        getgenv().disassemble = disassemble
-
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/Decompiler.lua"))()
         notify("Decompiler 2 Loaded", "Konstant Decompiler is now ready to use.")
 
     elseif option == 3 then
         local Success, Decompile_Source = pcall(function()
-            return game:HttpGet("https://raw.githubusercontent.com/OfficiallyMelon/BetterDecompiler/refs/heads/main/main.lua")
+            return game:HttpGetAsync("https://raw.githubusercontent.com/OfficiallyMelon/BetterDecompiler/refs/heads/main/main.lua")
         end)
 
         if Success then
