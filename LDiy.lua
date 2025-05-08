@@ -14091,7 +14091,7 @@ end
 		hrp.CFrame = spawnCFrame
 		notify("Therapy 🔊", "You should have all badges, if something went wrong please run the command again or report it to the developer."
 	end)
-end]]]
+end]]
 
 local hb = RunService.Heartbeat
 addcmd('tpwalk', {'teleportwalk', 'cframespeed', 'cspeed', 'cws', 'cwalkspeed', 'cframews', 'cframewalkspeed'}, function(args, speaker)
