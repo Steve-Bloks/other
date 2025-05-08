@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.8.8'
+currentVersion = '1.8.9'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -15307,9 +15307,8 @@ task.spawn(function()
 	end
 	if PlaceId == 8286149869 then
 		notify("Therapy 🔊", "Game Detected!\nRun \"DisableCustomAnticheat therapy\" to disable Therapy 🔊\'s anticheat.")
-		task.wait(5)
-		notify("Therapy 🔊", "Game Detected!\nAdded \"getbadges\" and \"gotoarea\"")
-		
+		--[[task.wait(5)
+		notify("Therapy 🔊", "Game Detected!\nAdded \"getbadges\" and \"gotoarea\"")]]
 	end
 end)
 
