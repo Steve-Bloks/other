@@ -1,5 +1,5 @@
 -- Release build 1
--- loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/HELLMET.lua"))() --
+-- loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Steve-Bloks/other/refs/heads/main/HELLMET.lua"))()
 
 
 
