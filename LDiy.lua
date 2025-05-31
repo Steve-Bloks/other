@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.2'
+currentVersion = '1.9.3'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -7787,8 +7787,8 @@ local bhopJumpForce = 75
 local bhopCanJump = false
 local bhopMovementKeys = {[Enum.KeyCode.W] = Vector3.new(0, 0, -1), [Enum.KeyCode.A] = Vector3.new(-1, 0, 0), [Enum.KeyCode.S] = Vector3.new(0, 0, 1), [Enum.KeyCode.D] = Vector3.new(1, 0, 0),}
 local bhopActiveKeys = {}
-bhopUIS.InputBegan:Connect(function(input, gpe) if gpe then return end; if movementKeys[input.KeyCode] then activeKeys[input.KeyCode] = true end end)
-bhopUIS.InputEnded:Connect(function(input) if movementKeys[input.KeyCode] then activeKeys[input.KeyCode] = nil end end)
+bhopUIS.InputBegan:Connect(function(input, gpe) if gpe then return end; if bhopMovementKeys[input.KeyCode] then bhopActiveKeys[input.KeyCode] = true end end)
+bhopUIS.InputEnded:Connect(function(input) if bhopMovementKeys[input.KeyCode] then bhopActiveKeys[input.KeyCode] = nil end end)
 
 local bhopLoop = nil
 local function bhopGetMovementDirection() -- helper
