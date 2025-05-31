@@ -4646,6 +4646,7 @@ CMDs[#CMDs + 1] = {NAME = 'vehiclefly / vfly [speed]', DESC = 'Makes you fly in 
 CMDs[#CMDs + 1] = {NAME = 'unvehiclefly / unvfly', DESC = 'Disables vehicle fly'}
 CMDs[#CMDs + 1] = {NAME = 'vehicleflyspeed  / vflyspeed [num]', DESC = 'Set vehicle fly speed'}
 CMDs[#CMDs + 1] = {NAME = 'cframefly / cfly [speed]', DESC = 'Makes you fly, bypassing some anti cheats (works on mobile)'}
+CMDs[#CMDs + 1] = {NAME = 'bhop [speed]', DESC = 'BHop, like CS:GO and Minecraft, but Roblox.'}
 CMDs[#CMDs + 1] = {NAME = 'uncframefly / uncfly', DESC = 'Disables cfly'}
 CMDs[#CMDs + 1] = {NAME = 'cframeflyspeed  / cflyspeed [num]', DESC = 'Sets cfly speed'}
 CMDs[#CMDs + 1] = {NAME = 'qefly [true / false]', DESC = 'enables or disables the Q and E hotkeys for fly'}
@@ -7759,16 +7760,15 @@ CFspeed = 5
 CFing = false
 local lastGravity=workspace.Gravity
 addcmd('cframefly', {'cfly'}, function(args, speaker)
-    -- credit to peyton#9148 (apeyton)
     execCmd('untweenfly\\unfly\\unvfly\\uncfly')
     CFing = true
     speaker.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
     local Head = speaker.Character:WaitForChild("Head")
-    execCmd("grav 0") -- this part was by tatsuki
+    execCmd("grav 0")
     if CFloop then CFloop:Disconnect() end
     CFloop = RunService.Heartbeat:Connect(function(deltaTime)
         local moveDirection = speaker.Character:FindFirstChildOfClass('Humanoid').MoveDirection * (CFspeed * 10 * deltaTime)
-        speaker.Character.PrimaryPart.Velocity=Vector3.zero --dude tatsuki why do you prefer over-optimizing shits
+        speaker.Character.PrimaryPart.Velocity=Vector3.zero
         local headCFrame = Head.CFrame
         local cameraCFrame = workspace.CurrentCamera.CFrame
         local cameraOffset = headCFrame:ToObjectSpace(cameraCFrame).Position
@@ -7779,6 +7779,53 @@ addcmd('cframefly', {'cfly'}, function(args, speaker)
         local objectSpaceVelocity = CFrame.new(cameraPosition, Vector3.new(headPosition.X, cameraPosition.Y, headPosition.Z)):VectorToObjectSpace(moveDirection)
         Head.CFrame = CFrame.new(headPosition) * (cameraCFrame - cameraPosition) * CFrame.new(objectSpaceVelocity)
     end)
+end)
+
+local bhopOrgGrav = workspace.Gravity
+local bhopJumpForce = 75
+local bhopCanJump = false
+local bhopMovementKeys = {[Enum.KeyCode.W] = Vector3.new(0, 0, -1), [Enum.KeyCode.A] = Vector3.new(-1, 0, 0), [Enum.KeyCode.S] = Vector3.new(0, 0, 1), [Enum.KeyCode.D] = Vector3.new(1, 0, 0),}
+local bhopActiveKeys = {}
+local bhopLoop = nil
+local function bhopGetMovementDirection() -- helper
+    local dir = Vector3.zero
+    for key, vec in pairs(movementKeys) do
+        if activeKeys[key] then
+            dir += vec
+        end
+    end
+    return dir.Magnitude > 0 and dir.Unit or nil
+end
+
+addcmd('bhop',{},function(args, speaker)
+	local char = speaker.Character or speaker.CharacterAdded
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	local bhopSpeed = args[1] or 50
+	if bhopLoop ~= nil then bhopLoop:Disconnect(); task.wait(); bhopLoop = nil end
+	bhopLoop = RunService.Stepped:Connect(function()
+	    local moveDir = bhopGetMovementDirection()
+    	if not moveDir then return end
+
+	    local camCF = workspace.CurrentCamera.CFrame
+    	local worldDir = camCF:VectorToWorldSpace(moveDir).Unit
+
+		if workspace.Gravity ~= 500 then workspace.Gravity = 500 end
+    	if hum.FloorMaterial ~= Enum.Material.Air and bhopCanJump then
+    	    bhopCanJump = false
+        	hrp.Velocity = Vector3.new(worldDir.X * bhopSpeed, bhopJumpForce, worldDir.Z * bhopSpeed)
+    	elseif hum.FloorMaterial ~= Enum.Material.Air then
+        	bhopCanJump = true
+    	else
+        	local currentVel = hrp.Velocity
+        	hrp.Velocity = Vector3.new(worldDir.X * bhopSpeed, currentVel.Y, worldDir.Z * bhopSpeed)
+    	end
+	end)
+end)
+
+addcmd('unbhop',{},function(args, speaker)
+	if not bhopLoop then return end
+	bhopLoop:Disconnect(); bhopLoop = nil
+	workspace.Gravity = bhopOrgGrav
 end)
 
 addcmd('uncframefly',{'uncfly'},function(args, speaker)
