@@ -4718,6 +4718,7 @@ CMDs[#CMDs + 1] = {NAME = 'bubblechat (CLIENT)', DESC = 'Enables bubble chat for
 CMDs[#CMDs + 1] = {NAME = 'unbubblechat / nobubblechat', DESC = 'Disables the bubblechat command'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'esp', DESC = 'View all players and their status'}
+CMDs[#CMDs + 1] = {NAME = 'up [distance]', DESC = 'Moves your character up to the roof or by the amount given'}
 CMDs[#CMDs + 1] = {NAME = 'noesp / unesp', DESC = 'Removes esp'}
 CMDs[#CMDs + 1] = {NAME = 'esptransparency [number]', DESC = 'Changes the transparency of esp related commands'}
 CMDs[#CMDs + 1] = {NAME = 'partesp [part name]', DESC = 'Highlights a part'}
@@ -9106,6 +9107,14 @@ end)
 
 addcmd('windowfocus', {}, function(args, speaker)
     wfenabled = true
+end)
+
+addcmd('up', {}, function(args, speaker)
+	-- TODO: make it teleport to roof if no height is entered (up to 9999 studs)
+	local char = speaker.Character
+	if not char then return end
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	hrp.CFrame.Position = Vector3.new(hrp.CFrame.Position.X, hrp.CFrame.Position.Y + args[1], hrp.CFrame.Position.Z)
 end)
 
 addcmd('unwindowfocus', {}, function(args, speaker)
