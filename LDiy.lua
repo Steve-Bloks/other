@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.4'
+currentVersion = '1.9.5'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -4918,6 +4918,8 @@ CMDs[#CMDs + 1] = {NAME = 'unflyjump', DESC = 'Disables flyjump'}
 CMDs[#CMDs + 1] = {NAME = 'autojump / ajump', DESC = 'Automatically jumps when you run into an object'}
 CMDs[#CMDs + 1] = {NAME = 'unautojump / unajump', DESC = 'Disables autojump'}
 CMDs[#CMDs + 1] = {NAME = 'edgejump / ejump', DESC = 'Automatically jumps when you get to the edge of an object'}
+CMDs[#CMDs + 1] = {NAME = 'partfling [radius]', DESC = 'Starts flinging unanchored parts around you at the set radius'}
+CMDs[#CMDs + 1] = {NAME = 'unpartfling', DESC = 'Disables part fling'}
 CMDs[#CMDs + 1] = {NAME = 'unedgejump / unejump', DESC = 'Disables edgejump'}
 CMDs[#CMDs + 1] = {NAME = 'platformstand / stun', DESC = 'Enables PlatformStand'}
 CMDs[#CMDs + 1] = {NAME = 'unplatformstand / unstun', DESC = 'Disables PlatformStand'}
@@ -10974,10 +10976,131 @@ addcmd('unautojump',{'noautojump', 'noajump', 'unajump'},function(args, speaker)
     HumanModCons.ajCA = (HumanModCons.ajCA and HumanModCons.ajCA:Disconnect() and false) or nil
 end)
 
+local PartFlingPlayers = game:GetService("Players")
+local PartFlingPlayer = PartFlingPlayers.LocalPlayer
+local PartFlingWorkspace = game:GetService("Workspace")
+
+local PartFlingCharacter = PartFlingPlayer.Character or PartFlingPlayer.CharacterAdded:Wait()
+local PartFlingHRP = PartFlingCharacter:WaitForChild("HumanoidRootPart")
+
+local PartFlingFolder = Instance.new("Folder", PartFlingWorkspace)
+local PartFlingPart = Instance.new("Part", PartFlingFolder)
+local Attachment1 = Instance.new("Attachment", PartFlingPart)
+PartFlingPart.Anchored = true
+PartFlingPart.CanCollide = false
+PartFlingPart.Transparency = 1
+
+if not getgenv().Network then
+    getgenv().Network = {
+        BaseParts = {},
+        Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+    }
+    Network.RetainPart = function(Part)
+        if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(PartFlingWorkspace) then
+            table.insert(Network.BaseParts, Part)
+            Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+            Part.CanCollide = false
+        end
+    end
+    local function EnablePartControl()
+        PartFlingPlayer.ReplicationFocus = PartFlingWorkspace
+        RunService.Heartbeat:Connect(function()
+            sethiddenproperty(PartFlingPlayer, "SimulationRadius", math.huge)
+            for _, Part in pairs(Network.BaseParts) do
+                if Part:IsDescendantOf(PartFlingWorkspace) then
+                    Part.Velocity = Network.Velocity
+                end
+            end
+        end)
+    end
+    EnablePartControl()
+end
+
+local PartFling = false
+local FlingingParts = {}
+local PartFlingHeight = 100
+local PartFlingRotationSpeed = 1
+local PartFlingAttractionStrength = 1000
+local function RetainPart(Part)
+    if Part:IsA("BasePart") and not Part.Anchored and Part:IsDescendantOf(PartFlingWorkspace) then
+        if Part.Parent == PartFlingPlayer.Character or Part:IsDescendantOf(PartFlingPlayer.Character) then
+            return false
+        end
+
+        Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+        Part.CanCollide = false
+        return true
+    end
+    return false
+end
+local function addPart(part)
+    if RetainPart(part) then
+        if not table.find(FlingingParts, part) then
+            table.insert(FlingingParts, part)
+        end
+    end
+end
+local function removePart(part)
+    local index = table.find(FlingingParts, part)
+    if index then
+        table.remove(FlingingParts, index)
+    end
+end
+for _, part in pairs(PartFlingWorkspace:GetDescendants()) do
+    addPart(part)
+end
+PartFlingWorkspace.DescendantAdded:Connect(addPart)
+PartFlingWorkspace.DescendantRemoving:Connect(removePart)
+local PartFlingRadius = 50
+local PartFlingLoop = nil
+
+addcmd('partfling',{},function(args, speaker)
+    if PartFlingLoop == nil then
+		PartFlingLoop = RunService.Heartbeat:Connect(function()
+			if not PartFling then return end
+			local PartFlingHRP = PartFlingPlayer.Character and PartFlingPlayer.Character:FindFirstChild("HumanoidRootPart")
+			if PartFlingHRP then
+				local tornadoCenter = PartFlingHRP.Position
+				for _, part in pairs(FlingingParts) do
+					if part.Parent and not part.Anchored then
+						local pos = part.Position
+						local distance = (Vector3.new(pos.X, tornadoCenter.Y, pos.Z) - tornadoCenter).Magnitude
+						local angle = math.atan2(pos.Z - tornadoCenter.Z, pos.X - tornadoCenter.X)
+						local newAngle = angle + math.rad(PartFlingRotationSpeed)
+	    				local targetPos = Vector3.new(
+							tornadoCenter.X + math.cos(newAngle) * math.min(PartFlingRadius, distance),
+							tornadoCenter.Y + (PartFlingHeight * (math.abs(math.sin((pos.Y - tornadoCenter.Y) / PartFlingHeight)))),
+							tornadoCenter.Z + math.sin(newAngle) * math.min(PartFlingRadius, distance)
+						)
+						local directionToTarget = (targetPos - part.Position).unit
+						part.Velocity = directionToTarget * PartFlingAttractionStrength
+					end
+				end
+			end
+		end)
+	end
+	PartFling = true
+	PartFlingRadius = args[1] or 50
+	for _, part in pairs(PartFlingWorkspace:GetDescendants()) do
+		addPart(part)
+	end
+end)
+
+addcmd('unpartfling',{},function(args, speaker)
+    PartFling = false
+	for _, part in pairs(FlingingParts) do
+		if part and part:IsDescendantOf(PartFlingWorkspace) then
+			part.CanCollide = true
+			part.Velocity = Vector3.zero
+			part.CustomPhysicalProperties = nil
+		end
+	end
+	table.clear(FlingingParts)
+end)
+
 addcmd('edgejump',{'ejump'},function(args, speaker)
     local Char = speaker.Character
     local Human = Char and Char:FindFirstChildWhichIsA("Humanoid")
-    -- Full credit to NoelGamer06 @V3rmillion
     local state
     local laststate
     local lastcf
@@ -15243,23 +15366,27 @@ eventEditor.Refresh()
 
 eventEditor.FireEvent("OnExecute")
 
-if aliases and #aliases > 0 then
-    local cmdMap = {}
-    for i,v in pairs(cmds) do
-        cmdMap[v.NAME:lower()] = v
-        for _,alias in pairs(v.ALIAS) do
-            cmdMap[alias:lower()] = v
+local function mapAllAliasesMain()
+    if aliases and #aliases > 0 then
+        local cmdMap = {}
+        for i,v in pairs(cmds) do
+            cmdMap[v.NAME:lower()] = v
+            for _,alias in pairs(v.ALIAS) do
+                cmdMap[alias:lower()] = v
+            end
         end
-    end
-    for i = 1, #aliases do
-        local cmd = string.lower(aliases[i].CMD)
-        local alias = string.lower(aliases[i].ALIAS)
-        if cmdMap[cmd] then
-            customAlias[alias] = cmdMap[cmd]
+        for i = 1, #aliases do
+            local cmd = string.lower(aliases[i].CMD)
+            local alias = string.lower(aliases[i].ALIAS)
+            if cmdMap[cmd] then
+                customAlias[alias] = cmdMap[cmd]
+            end
         end
+        refreshaliases()
     end
-    refreshaliases()
 end
+
+mapAllAliasesMain()
 
 IYMouse.Move:Connect(checkTT)
 
@@ -15356,7 +15483,7 @@ task.spawn(function()
     IntroBackground:Destroy()
     minimizeHolder()
     if IsOnMobile then
-        notify("Unstable Device", "On mobile, Infinite Yield Reborn has a lot of bugs. It's recommended to use a PC executor")
+        notify("Unstable Device", "On mobile, LuaDev's Infinite Yield has a lot of bugs. It's recommended to use a PC executor")
         task.wait(3)
     end
     if PlaceId == 574746640 then
