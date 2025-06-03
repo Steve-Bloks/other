@@ -8817,7 +8817,7 @@ addcmd('antikick',{'clientantikick'},function(args, speaker)
     end
 
     local oldhmmnc
-    oldhmmnc = hookmetamethod(game, "__namecall", function(self, ...)
+    oldhmmnc = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
         if self == LocalPlayer and table.find(KickFunctions, getnamecallmethod()) then
             if AllowExecutorKicks and checkcaller() then
                 return oldhmmnc(self, ...)
@@ -8826,7 +8826,7 @@ addcmd('antikick',{'clientantikick'},function(args, speaker)
             end
         end
         return oldhmmnc(self, ...)
-    end)
+    end))
 
     notify('Antikick','Client anti kick is now active (only effective on localscript kick)')
 end)
