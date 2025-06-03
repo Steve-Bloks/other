@@ -13695,10 +13695,46 @@ addcmd("toggleflyfling", {}, function(args, speaker)
     execCmd(flinging and "unflyfling" or "flyfling")
 end)
 
+addcmd("hideplayers", {}, function(args, speaker)
+	local players = game:GetService("Players")
+	local player = players.LocalPlayer or players.PlayerAdded:Wait()
+
+	for i, plr in pairs(players:GetPlayers()) do
+		if plr.Name ~= speaker.Name then
+			local char = plr.Character
+			for i, child in pairs(char:GetChildren()) do
+				if child:IsA("Part") or child:IsA("MeshPart") then
+					child.Transparency = 1
+				elseif child:IsA("Accessory") then
+					child:FindFirstChild("Handle").Transparency = 1
+				end
+			end
+		end
+	end
+end)
+
+addcmd("unhideplayers", {}, function(args, speaker)
+	local players = game:GetService("Players")
+	local player = players.LocalPlayer or players.PlayerAdded:Wait()
+
+	for i, plr in pairs(players:GetPlayers()) do
+		if plr.Name ~= speaker.Name then
+			local char = plr.Character
+			for i, child in pairs(char:GetChildren()) do
+				if child.Name ~= HumanoidRootPart and (child:IsA("Part") or child:IsA("MeshPart")) then
+					child.Transparency = 1
+				elseif child:IsA("Accessory") then
+					child:FindFirstChild("Handle").Transparency = 1
+				end
+			end
+		end
+	end
+end)
+
 addcmd('invisfling',{},function(args, speaker)
 	notify("invisfling initiating, please do not move and wait for the red highlighted fling part.\nthis process can take up to 15 seconds.")
 	execCmd("flyspeed 0.5");task.wait(3)
-    permadeath(speaker)
+    permadeath(speaker);task.wait(1)
     local ch = speaker.Character
     local prt=Instance.new("Model")
     prt.Parent = speaker.Character
