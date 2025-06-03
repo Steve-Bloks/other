@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.8'
+currentVersion = '1.9.7'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13693,8 +13693,8 @@ addcmd("toggleflyfling", {}, function(args, speaker)
 end)
 
 addcmd('invisfling',{},function(args, speaker)
-	execCmd("god")
-	task.wait(5)
+	execCmd("flyspeed 0.5");task.wait()
+	execCmd("god");task.wait(5)
     permadeath(speaker)
     local ch = speaker.Character
     local prt=Instance.new("Model")
@@ -13726,7 +13726,7 @@ addcmd('invisfling',{},function(args, speaker)
         end
     end
     root.Transparency = 0.5
-    root.Color = Color3.new(1, 0, 0)
+    root.Color = Color3.new(255, 0, 0)
     local invisflingStepped
     invisflingStepped = RunService.Stepped:Connect(function()
         if speaker.Character and getRoot(speaker.Character) then
