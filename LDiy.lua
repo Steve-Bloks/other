@@ -13727,7 +13727,7 @@ addcmd('invisfling',{},function(args, speaker)
         end
     end
     root.Transparency = 0.5
-    root.Color = Color3.new(255, 0, 0)
+    root.Color = Color3.new(1, 0, 0)
     local invisflingStepped
     invisflingStepped = RunService.Stepped:Connect(function()
         if speaker.Character and getRoot(speaker.Character) then
