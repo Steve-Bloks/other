@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.5'
+currentVersion = '1.9.6'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -4918,8 +4918,8 @@ CMDs[#CMDs + 1] = {NAME = 'unflyjump', DESC = 'Disables flyjump'}
 CMDs[#CMDs + 1] = {NAME = 'autojump / ajump', DESC = 'Automatically jumps when you run into an object'}
 CMDs[#CMDs + 1] = {NAME = 'unautojump / unajump', DESC = 'Disables autojump'}
 CMDs[#CMDs + 1] = {NAME = 'edgejump / ejump', DESC = 'Automatically jumps when you get to the edge of an object'}
-CMDs[#CMDs + 1] = {NAME = 'partfling [radius]', DESC = 'Starts flinging unanchored parts around you at the set radius'}
-CMDs[#CMDs + 1] = {NAME = 'unpartfling', DESC = 'Disables part fling'}
+CMDs[#CMDs + 1] = {NAME = 'flingparts [radius]', DESC = 'Starts flinging unanchored parts around you at the set radius'}
+CMDs[#CMDs + 1] = {NAME = 'unflingparts', DESC = 'Disables part fling'}
 CMDs[#CMDs + 1] = {NAME = 'unedgejump / unejump', DESC = 'Disables edgejump'}
 CMDs[#CMDs + 1] = {NAME = 'platformstand / stun', DESC = 'Enables PlatformStand'}
 CMDs[#CMDs + 1] = {NAME = 'unplatformstand / unstun', DESC = 'Disables PlatformStand'}
@@ -11054,7 +11054,7 @@ PartFlingWorkspace.DescendantRemoving:Connect(removePart)
 local PartFlingRadius = 50
 local PartFlingLoop = nil
 
-addcmd('partfling',{},function(args, speaker)
+addcmd('flingparts',{},function(args, speaker)
     if PartFlingLoop == nil then
 		PartFlingLoop = RunService.Heartbeat:Connect(function()
 			if not PartFling then return end
@@ -11086,7 +11086,7 @@ addcmd('partfling',{},function(args, speaker)
 	end
 end)
 
-addcmd('unpartfling',{},function(args, speaker)
+addcmd('unflingparts',{},function(args, speaker)
     PartFling = false
 	for _, part in pairs(FlingingParts) do
 		if part and part:IsDescendantOf(PartFlingWorkspace) then
