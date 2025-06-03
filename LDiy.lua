@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.7'
+currentVersion = '1.9.8'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13725,8 +13725,8 @@ addcmd('invisfling',{},function(args, speaker)
             v:Destroy()
         end
     end
-    root.Transparency = 0
-    root.Color = Color3.new(1, 1, 1)
+    root.Transparency = 0.5
+    root.Color = Color3.new(1, 0, 0)
     local invisflingStepped
     invisflingStepped = RunService.Stepped:Connect(function()
         if speaker.Character and getRoot(speaker.Character) then
