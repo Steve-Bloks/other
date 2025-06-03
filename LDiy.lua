@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.6'
+currentVersion = '1.9.7'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -13693,6 +13693,8 @@ addcmd("toggleflyfling", {}, function(args, speaker)
 end)
 
 addcmd('invisfling',{},function(args, speaker)
+	execCmd("god")
+	task.wait(5)
     permadeath(speaker)
     local ch = speaker.Character
     local prt=Instance.new("Model")
