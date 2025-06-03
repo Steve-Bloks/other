@@ -11054,7 +11054,10 @@ PartFlingWorkspace.DescendantRemoving:Connect(removePart)
 local PartFlingRadius = 50
 local PartFlingLoop = nil
 
+local one = false
+
 addcmd('flingparts',{},function(args, speaker)
+	if one == false then one = true; return end
     if PartFlingLoop == nil then
 		PartFlingLoop = RunService.Heartbeat:Connect(function()
 			if not PartFling then return end
