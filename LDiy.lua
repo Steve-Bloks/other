@@ -5989,7 +5989,7 @@ addcmd('esp',{},function(args, speaker)
 end)
 
 function Locate(plr)
-	for player, drawing in pairs(cachedESP) do if player == plr.Name then return end
+	for player, drawing in pairs(cachedESP) do if player == plr.Name then return end end
     if plr ~= game.Players.LocalPlayer then
         createESP(plr.Name)
     end
