@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.8'
+currentVersion = '1.9.9'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -5872,94 +5872,131 @@ function round2(...)
     return unpack(a)
 end
 
+local cachedESP = {}
+function createESP(player)
+    --print(player.." | create esp")
+    local espitems = {}
+    if Drawing then
+        espitems.box = Drawing.new("Square")
+        espitems.box.Thickness = 1
+        espitems.box.Filled = false
+        espitems.box.Color = Color3.new(255,0,0)
+        espitems.box.Visible = false
+        espitems.box.ZIndex = 2
+        espitems.boxl = Drawing.new("Square")
+        espitems.boxl.Thickness = 2
+        espitems.boxl.Filled = false
+        espitems.boxl.Color = Color3.new(0,0,0)
+        espitems.boxl.Visible = false
+        espitems.boxl.ZIndex = 1
+        espitems.healthbar = Drawing.new("Square")
+        espitems.healthbar.Thickness = 1
+        espitems.healthbar.Filled = true
+        espitems.healthbar.Color = Color3.new(0,255,0)
+        espitems.healthbar.Visible = false
+        espitems.healthbar.ZIndex = 2
+        espitems.healthbarl = Drawing.new("Square")
+        espitems.healthbarl.Thickness = 2
+        espitems.healthbarl.Filled = true
+        espitems.healthbarl.Color = Color3.new(0,0,0)
+        espitems.healthbarl.Visible = false
+        espitems.healthbarl.ZIndex = 1
+        espitems.name = Drawing.new("Text")
+        espitems.name.Size = 14
+        espitems.name.Center = true
+        espitems.name.Outline = true
+        espitems.name.Color = Color3.fromRGB(255, 255, 255)
+        espitems.name.Visible = false
+        espitems.name.ZIndex = 2
+        espitems.distance = Drawing.new("Text")
+        espitems.distance.Size = 14
+        espitems.distance.Center = true
+        espitems.distance.Outline = true
+        espitems.distance.Color = Color3.fromRGB(255, 255, 255)
+        espitems.distance.Visible = false
+        espitems.distance.ZIndex = 2
+    end
+    cachedESP[player] = espitems
+end
 
-function Locate(plr)
-    task.spawn(function()
-        for i,v in pairs(COREGUI:GetChildren()) do
-            if v.Name == plr.Name..'_LC' then
-                v:Destroy()
+function removeESP(player)
+    if rawget(cachedESP, player) then
+        for _, drawing in next, cachedESP[player] do
+            drawing:Remove();
+        end
+        cachedESP[player] = nil;
+    end
+end
+
+function updateESP(player, esp)
+    local char = Players:FindFirstChild(player) and Players:FindFirstChild(player).Character
+    if char then
+        local cframe = char:GetModelCFrame() --rarely used wtf
+        local position, visible, depth = wtvp(cframe.Position)
+        esp.box.Visible = visible
+        esp.boxl.Visible = visible
+        esp.healthbar.Visible = visible
+        esp.healthbarl.Visible = visible
+        esp.name.Visible = visible
+        esp.distance.Visible = visible
+        if cframe and visible then
+            local sf = 1 / (depth * math.tan(math.rad(Camera.FieldOfView / 2)) * 2) * 1000
+            local w, h = round2(4 * sf, 5 * sf)
+            local x, y = round2(position.X, position.Y)
+            esp.box.Size = Vector2.new(w,h)
+            esp.box.Position = Vector2.new(round2(x - w / 2, y - h / 2))
+            esp.box.Color = Players:FindFirstChild(player).TeamColor.Color or Color3.fromRGB(255,0,0)
+            esp.boxl.Size = esp.box.Size
+            esp.boxl.Position = esp.box.Position
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            if hum then
+                local hp = hum.Health / hum.MaxHealth
+                esp.healthbar.Size = Vector2.new(2, h * hp)
+                esp.healthbar.Position = Vector2.new(round2(x - w / 2 - 8, y - h / 2 + h  * (1 - hp)))
+                esp.healthbarl.Size = Vector2.new(4, h)
+                esp.healthbarl.Position = Vector2.new(round2(x - w / 2 - 8, y - h / 2))
+            end
+            esp.name.Text = Players:FindFirstChild(player).DisplayName..` (@{Players:FindFirstChild(player).Name})`
+            esp.name.Position = Vector2.new(x, y - h / 2 - 24)
+            esp.distance.Text = tostring(round2(depth)).." studs"
+            esp.distance.Position = Vector2.new(x, y + h / 2 + 16)
+        end
+    else
+        esp.box.Visible = false
+        esp.boxl.Visible = false
+        esp.healthbar.Visible = false
+        esp.healthbarl.Visible = false
+        esp.name.Visible = false
+        esp.distance.Visible = false
+    end
+end
+
+addcmd('esp',{},function(args, speaker)
+    if ESPenabled then return end
+    ESPenabled = true
+    for _, plr in next, Players:GetPlayers() do
+        if plr ~= speaker then
+            createESP(plr.Name)
+        end
+    end
+    RunService:BindToRenderStep("ldiyesp", Enum.RenderPriority.Camera.Value, function()
+        for plr, drawing in pairs(cachedESP) do
+            if plr ~= speaker and drawing ~= nil then
+                updateESP(plr, drawing)
             end
         end
-        task.wait()
-        if plr.Character and plr.Name ~= Players.LocalPlayer.Name and not COREGUI:FindFirstChild(plr.Name..'_LC') then
-            local ESPholder = Instance.new("Folder")
-            ESPholder.Name = plr.Name..'_LC'
-            ESPholder.Parent = COREGUI
-            repeat task.wait(1) until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
-            for b,n in pairs (plr.Character:GetChildren()) do
-                if (n:IsA("BasePart")) then
-                    local a = Instance.new("BoxHandleAdornment")
-                    a.Name = plr.Name
-                    a.Parent = ESPholder
-                    a.Adornee = n
-                    a.AlwaysOnTop = true
-                    a.ZIndex = 10
-                    a.Size = n.Size
-                    a.Transparency = espTransparency
-                    a.Color = plr.TeamColor
-                end
-            end
-            if plr.Character and plr.Character:FindFirstChild('Head') then
-                local BillboardGui = Instance.new("BillboardGui")
-                local TextLabel = Instance.new("TextLabel")
-                BillboardGui.Adornee = plr.Character.Head
-                BillboardGui.Name = plr.Name
-                BillboardGui.Parent = ESPholder
-                BillboardGui.Size = UDim2.new(0, 100, 0, 150)
-                BillboardGui.StudsOffset = Vector3.new(0, 1, 0)
-                BillboardGui.AlwaysOnTop = true
-                TextLabel.Parent = BillboardGui
-                TextLabel.BackgroundTransparency = 1
-                TextLabel.Position = UDim2.new(0, 0, 0, -50)
-                TextLabel.Size = UDim2.new(0, 100, 0, 100)
-                TextLabel.Font = Enum.Font.SourceSansSemibold
-                TextLabel.TextSize = 20
-                TextLabel.TextColor3 = Color3.new(1, 1, 1)
-                TextLabel.TextStrokeTransparency = 0
-                TextLabel.TextYAlignment = Enum.TextYAlignment.Bottom
-                TextLabel.Text = 'Name: '..plr.Name
-                TextLabel.ZIndex = 10
-                local lcLoopFunc
-                local addedFunc
-                local teamChange
-                addedFunc = plr.CharacterAdded:Connect(function()
-                    if ESPholder ~= nil and ESPholder.Parent ~= nil then
-                        lcLoopFunc:Disconnect()
-                        teamChange:Disconnect()
-                        ESPholder:Destroy()
-                        repeat task.wait(1) until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
-                        Locate(plr)
-                        addedFunc:Disconnect()
-                    else
-                        teamChange:Disconnect()
-                        addedFunc:Disconnect()
-                    end
-                end)
-                teamChange = plr:GetPropertyChangedSignal("TeamColor"):Connect(function()
-                    if ESPholder ~= nil and ESPholder.Parent ~= nil then
-                        lcLoopFunc:Disconnect()
-                        addedFunc:Disconnect()
-                        ESPholder:Destroy()
-                        repeat task.wait(1) until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
-                        Locate(plr)
-                        teamChange:Disconnect()
-                    else
-                        teamChange:Disconnect()
-                    end
-                end)
-                local function lcLoop()
-                    if COREGUI:FindFirstChild(plr.Name..'_LC') then
-                        if plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid") and Players.LocalPlayer.Character and getRoot(Players.LocalPlayer.Character) and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
-                            local pos = math.floor((getRoot(Players.LocalPlayer.Character).Position - getRoot(plr.Character).Position).magnitude)
-                            TextLabel.Text = 'Name: '..plr.Name..' | Health: '..round(plr.Character:FindFirstChildOfClass('Humanoid').Health, 1)..' | Studs: '..pos
-                        end
-                    else
-                        teamChange:Disconnect()
-                        addedFunc:Disconnect()
-                        lcLoopFunc:Disconnect()
-                    end
-                end
-                lcLoopFunc = RunService.RenderStepped:Connect(lcLoop)
+    end)
+end)
+
+function Locate(plr)
+	for player, drawing in pairs(cachedESP) do if player == plr.Name then return end
+    if plr ~= game.Players.LocalPlayer then
+        createESP(plr.Name)
+    end
+    RunService:BindToRenderStep("ldiyesp", Enum.RenderPriority.Camera.Value, function()
+        for plr, drawing in pairs(cachedESP) do
+            if plr ~= speaker and drawing ~= nil then
+                updateESP(plr, drawing)
             end
         end
     end)
