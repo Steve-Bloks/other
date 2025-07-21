@@ -16,9 +16,9 @@ end
 
 notifyPlayer("Silly Animations", "Made By LuaDev", 8)
 
-local isChatLegacy = (TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService)
+local isChatLegacy = (game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.LegacyChatService)
 local chatRemote = ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
-local textChannels = TextChatService:FindFirstChild("TextChannels")
+local textChannels = game:GetService("TextChatService"):FindFirstChild("TextChannels")
 local RBXGeneral = if textChannels then textChannels:FindFirstChild("RBXGeneral") else nil
 local chatChannel = not isChatLegacy and RBXGeneral
 
