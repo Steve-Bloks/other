@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.9'
+currentVersion = '1.9.10'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -11027,75 +11027,77 @@ PartFlingPart.Anchored = true
 PartFlingPart.CanCollide = false
 PartFlingPart.Transparency = 1
 
-if not getgenv().Network then
-    getgenv().Network = {
-        BaseParts = {},
-        Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
-    }
-    Network.RetainPart = function(Part)
-        if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(PartFlingWorkspace) then
-            table.insert(Network.BaseParts, Part)
-            Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-            Part.CanCollide = false
-        end
-    end
-    local function EnablePartControl()
-        PartFlingPlayer.ReplicationFocus = PartFlingWorkspace
-        RunService.Heartbeat:Connect(function()
-            sethiddenproperty(PartFlingPlayer, "SimulationRadius", math.huge)
-            for _, Part in pairs(Network.BaseParts) do
-                if Part:IsDescendantOf(PartFlingWorkspace) then
-                    Part.Velocity = Network.Velocity
-                end
-            end
-        end)
-    end
-    EnablePartControl()
-end
-
 local PartFling = false
 local FlingingParts = {}
 local PartFlingHeight = 100
 local PartFlingRotationSpeed = 1
 local PartFlingAttractionStrength = 1000
-local function RetainPart(Part)
-    if Part:IsA("BasePart") and not Part.Anchored and Part:IsDescendantOf(PartFlingWorkspace) then
-        if Part.Parent == PartFlingPlayer.Character or Part:IsDescendantOf(PartFlingPlayer.Character) then
-            return false
-        end
-
-        Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-        Part.CanCollide = false
-        return true
-    end
-    return false
-end
-local function addPart(part)
-    if RetainPart(part) then
-        if not table.find(FlingingParts, part) then
-            table.insert(FlingingParts, part)
-        end
-    end
-end
-local function removePart(part)
-    local index = table.find(FlingingParts, part)
-    if index then
-        table.remove(FlingingParts, index)
-    end
-end
-for _, part in pairs(PartFlingWorkspace:GetDescendants()) do
-    addPart(part)
-end
-PartFlingWorkspace.DescendantAdded:Connect(addPart)
-PartFlingWorkspace.DescendantRemoving:Connect(removePart)
 local PartFlingRadius = 50
 local PartFlingLoop = nil
-
 local one = false
+local addConn, removeConn = nil, nil
 
-addcmd('flingparts',{},function(args, speaker)
+local function RetainPart(Part)
+	if Part:IsA("BasePart") and not Part.Anchored and Part:IsDescendantOf(PartFlingWorkspace) then
+		if Part.Parent == PartFlingPlayer.Character or Part:IsDescendantOf(PartFlingPlayer.Character) then
+			return false
+		end
+
+		Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+		Part.CanCollide = false
+		return true
+	end
+	return false
+end
+
+local function addPart(part)
+	if RetainPart(part) then
+		if not table.find(FlingingParts, part) then
+			table.insert(FlingingParts, part)
+		end
+	end
+end
+
+local function removePart(part)
+	local index = table.find(FlingingParts, part)
+	if index then
+		table.remove(FlingingParts, index)
+	end
+end
+
+addcmd('flingparts', {}, function(args, speaker)
 	if one == false then one = true; return end
-    if PartFlingLoop == nil then
+
+	if not getgenv().Network then
+		getgenv().Network = {
+			BaseParts = {},
+			Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+		}
+		Network.RetainPart = function(Part)
+			if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(PartFlingWorkspace) then
+				table.insert(Network.BaseParts, Part)
+				Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+				Part.CanCollide = false
+			end
+		end
+
+		local function EnablePartControl()
+			PartFlingPlayer.ReplicationFocus = PartFlingWorkspace
+			RunService.Heartbeat:Connect(function()
+				if not PartFling then return end -- ✅ Prevent global effect
+				sethiddenproperty(PartFlingPlayer, "SimulationRadius", math.huge)
+				for _, Part in pairs(Network.BaseParts) do
+					if Part:IsDescendantOf(PartFlingWorkspace) then
+						Part.Velocity = Network.Velocity
+					end
+				end
+			end)
+		end
+
+		EnablePartControl()
+	end
+
+	if PartFlingLoop == nil then
 		PartFlingLoop = RunService.Heartbeat:Connect(function()
 			if not PartFling then return end
 			local PartFlingHRP = PartFlingPlayer.Character and PartFlingPlayer.Character:FindFirstChild("HumanoidRootPart")
@@ -11107,7 +11109,7 @@ addcmd('flingparts',{},function(args, speaker)
 						local distance = (Vector3.new(pos.X, tornadoCenter.Y, pos.Z) - tornadoCenter).Magnitude
 						local angle = math.atan2(pos.Z - tornadoCenter.Z, pos.X - tornadoCenter.X)
 						local newAngle = angle + math.rad(PartFlingRotationSpeed)
-	    				local targetPos = Vector3.new(
+						local targetPos = Vector3.new(
 							tornadoCenter.X + math.cos(newAngle) * math.min(PartFlingRadius, distance),
 							tornadoCenter.Y + (PartFlingHeight * (math.abs(math.sin((pos.Y - tornadoCenter.Y) / PartFlingHeight)))),
 							tornadoCenter.Z + math.sin(newAngle) * math.min(PartFlingRadius, distance)
@@ -11119,15 +11121,24 @@ addcmd('flingparts',{},function(args, speaker)
 			end
 		end)
 	end
+
 	PartFling = true
 	PartFlingRadius = args[1] or 50
+
 	for _, part in pairs(PartFlingWorkspace:GetDescendants()) do
 		addPart(part)
 	end
+
+	-- ✅ Delay part tracking until command is run
+	addConn = PartFlingWorkspace.DescendantAdded:Connect(addPart)
+	removeConn = PartFlingWorkspace.DescendantRemoving:Connect(removePart)
 end)
 
-addcmd('unflingparts',{},function(args, speaker)
-    PartFling = false
+addcmd('unflingparts', {}, function(args, speaker)
+	PartFling = false
+	if addConn then addConn:Disconnect() end
+	if removeConn then removeConn:Disconnect() end
+
 	for _, part in pairs(FlingingParts) do
 		if part and part:IsDescendantOf(PartFlingWorkspace) then
 			part.CanCollide = true
@@ -11135,6 +11146,7 @@ addcmd('unflingparts',{},function(args, speaker)
 			part.CustomPhysicalProperties = nil
 		end
 	end
+
 	table.clear(FlingingParts)
 end)
 
