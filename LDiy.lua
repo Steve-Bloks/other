@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.10'
+currentVersion = '1.9.11'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -10616,9 +10616,8 @@ addcmd('god',{},function(args, speaker)
     nHuman.Health = nHuman.MaxHealth
 end)
 
---nah lazy
 invisRunning = false
-addcmd("visible", {"vis","uninvisible"}, function(args, speaker)
+addcmd("invisible", {"invis"}, function(args, speaker)
     if invisRunning then return end
     invisRunning = true
     permadeath(speaker)
