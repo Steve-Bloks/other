@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.11'
+currentVersion = '1.9.12'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -11596,7 +11596,7 @@ addcmd('spoofspeed',{'spoofws','spoofwalkspeed'},function(args, speaker)
     if args[1] and isNumber(args[1]) then
         if hookmetamethod then
             local char = speaker.Character
-            local setspeed;
+            local setspeed = char.Humanoid.WalkSpeed;
             local index; index = hookmetamethod(game, "__index", function(self, key)
                 local keyclean = key:gsub("\0", "")
                 if (keyclean == "WalkSpeed" or keyclean == "walkSpeed") and self:IsA("Humanoid") and self:IsDescendantOf(char) and not checkcaller() then
