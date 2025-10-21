@@ -25,7 +25,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = '1.9.12'
+currentVersion = '1.9.13'
 
 local guiScale = 1 -- lazy fix for bug lol
 
@@ -11597,20 +11597,20 @@ addcmd('spoofspeed',{'spoofws','spoofwalkspeed'},function(args, speaker)
         if hookmetamethod then
             local char = speaker.Character
             local setspeed = char.Humanoid.WalkSpeed;
-            local index; index = hookmetamethod(game, "__index", function(self, key)
-                local keyclean = key:gsub("\0", "")
-                if (keyclean == "WalkSpeed" or keyclean == "walkSpeed") and self:IsA("Humanoid") and self:IsDescendantOf(char) and not checkcaller() then
-                    return setspeed or args[1]
-                end
-                return index(self, key)
-            end)
-            local newindex; newindex = hookmetamethod(game, "__newindex", function(self, key, value)
+			local newindex; newindex = hookmetamethod(game, "__newindex", function(self, key, value)
                 local keyclean = string.gsub(key, "\0", "")
                 if (keyclean == "WalkSpeed" or keyclean == "walkSpeed") and self:IsA("Humanoid") and self:IsDescendantOf(char) and not checkcaller() then
                     setspeed = tonumber(value)
                     return setspeed
                 end
                 return newindex(self, key, value)
+            end)
+            local index; index = hookmetamethod(game, "__index", function(self, key)
+                local keyclean = key:gsub("\0", "")
+                if (keyclean == "WalkSpeed" or keyclean == "walkSpeed") and self:IsA("Humanoid") and self:IsDescendantOf(char) and not checkcaller() then
+                    return setspeed or args[1]
+                end
+                return index(self, key)
             end)
         else
             notify('Incompatible Exploit','Your exploit does not support this command (missing hookmetamethod)')
