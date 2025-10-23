@@ -13,7 +13,6 @@ local function sendchat(str)
         chatChannel:SendAsync(str)
     end
 end
-sendchat("[Powered by LuaDev's ro-bot framework]")
 
 local HttpService = game:GetService("HttpService")
 local chatLogs = {}
@@ -157,4 +156,7 @@ if #servers > 0 then
 else
     sendchat("{debug} failed to find new instance, exitting...")
     error("Serverhop: Couldn't find a server.")
+    writeLogs()
+    task.wait(1)
+    game:Shutdown()
 end
